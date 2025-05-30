@@ -197,27 +197,27 @@ proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智�
   #分隔,下面是地区分组：专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 自动选择, 全部节点
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 专线, type: select, include-all: true, filter: "(?i)(专|專)",
+- {name: 专线, type: url-test, include-all: true, filter: "(?i)(专|專)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
-- {name: 香港, type: select, include-all: true, filter: "(?i)(?!直连)(港|hk|hongkong|hong kong)",
+- {name: 香港, type: url-test, include-all: true, filter: "(?i)(港|hk|hongkong|hong kong)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/HK.png"}
-- {name: 台湾, type: select, include-all: true, filter: "(?i)(?!直连)(台|tw|taiwan)",
+- {name: 台湾, type: url-test, include-all: true, filter: "(?i)(台|tw|taiwan)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TW.png"}
-- {name: 日本, type: select, include-all: true, filter: "(?i)(?!直连)(日|jp|japan)",
+- {name: 日本, type: url-test, include-all: true, filter: "(?i)(日|jp|japan)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/JP.png"}
-- {name: 韩国, type: select, include-all: true, filter: "(?i)(韩|kr)",
+- {name: 韩国, type: url-test, include-all: true, filter: "(?i)(韩|kr)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Korea.png"}
-- {name: 英国, type: select, include-all: true, filter: "(?i)英|uk",
+- {name: 英国, type: url-test, include-all: true, filter: "(?i)(英|uk)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/UK.png"}
-- {name: 美国, type: select, include-all: true, filter: "(?i)(?!直连)(美|us|unitedstates|united states)",
+- {name: 美国, type: url-test, include-all: true, filter: "(?i)(美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/US.png"}
-- {name: 新加坡, type: select, include-all: true, filter: "(?i)(?!直连)(新加坡|sg|singapore)",
+- {name: 新加坡, type: url-test, include-all: true, filter: "(?i)(新加坡|sg|singapore)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk)).*",
+- {name: 其它地区, type: url-test, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 10,
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 10, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 全部节点, type: select, include-all: true,
+- {name: 全部节点, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
