@@ -179,7 +179,7 @@ proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智�
 - {name: 人工智能, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
 - {name: 云存储, <<: *pr,
- icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png}
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
 - {name: 社交媒体, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
 - {name: 游戏平台, <<: *pr,
@@ -222,7 +222,8 @@ proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智�
 
 rules:
 # 直连:     直连
-  - GEOIP,private,lan,直连,no-resolve
+  - GEOIP,lan,直连,no-resolve
+  - GEOIP,private,直连,no-resolve
   - GEOSITE,private,直连,no-resolve
   - RULE-SET,applications,DIRECT
   - DOMAIN-SUFFIX,smtp,DIRECT
@@ -231,28 +232,55 @@ rules:
   - DOMAIN-SUFFIX,live.cn,DIRECT
 # 规则阻断: 阻断
   - RULE-SET,reject,阻断
-  - GEOSITE,adobe,category-ads-all,win-spy,win-extra,阻断
+  - GEOSITE,adobe,阻断
+  - GEOSITE,win-spy,阻断
+  - GEOSITE,win-extra,阻断
+  - GEOSITE,category-ads-all,阻断
   - GEOIP,ad,阻断
 # 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW
   # GEOSITE:
-  - GEOSITE,apple@cn,steam@cn,google@cn,bilibili,tencent,国内
-  # - GEOSITE,amazon,speedtest,paypal,其他
+  - GEOSITE,apple@cn,国内
+  - GEOSITE,steam@cn,国内
+  - GEOSITE,google@cn,国内
+  - GEOSITE,epicgames@cn,国内
   - GEOSITE,github,学术资源
-  - GEOSITE,openai,google,microsoft,perplexity,人工智能
-  - GEOSITE,pikpak,onedrive,云存储
-  - GEOSITE,twitter,facebook,telegram,discord,reddit,tiktok,社交媒体
-  - GEOSITE,steam,ubisoft,游戏平台
-  - GEOSITE,youtube,netflix,bahamut,spotify,disney,hulu,hbo,流媒体
-  - GEOSITE,pornhub,pixiv,18comic,ehentai,NSFW
+  - GEOSITE,openai,人工智能
+  - GEOSITE,google,人工智能
+  - GEOSITE,microsoft,人工智能
+  - GEOSITE,pikpak,云存储
+  - GEOSITE,onedrive,云存储
+  - GEOSITE,reddit,社交媒体
+  - GEOSITE,tiktok,社交媒体
+  - GEOSITE,discord,社交媒体
+  - GEOSITE,twitter,社交媒体
+  - GEOSITE,facebook,社交媒体
+  - GEOSITE,telegram,社交媒体
+  - GEOSITE,steam,游戏平台
+  - GEOSITE,ubisoft,游戏平台
+  - GEOSITE,epicgames,游戏平台
+  - GEOSITE,hbo,流媒体
+  - GEOSITE,hulu,流媒体
+  - GEOSITE,abema,流媒体
+  - GEOSITE,disney,流媒体
+  - GEOSITE,youtube,流媒体
+  - GEOSITE,netflix,流媒体
+  - GEOSITE,bahamut,流媒体
+  - GEOSITE,spotify,流媒体
+  - GEOSITE,biliintl,流媒体
+  - GEOSITE,pixiv,NSFW
+  - GEOSITE,pornhub,NSFW
+  - GEOSITE,18comic,NSFW
+  - GEOSITE,ehentai,NSFW
   - GEOSITE,CN,国内
   - GEOSITE,geolocation-!cn,其他
   # GEOIP:
   - GEOIP,google,人工智能
   - GEOIP,netflix,流媒体
-  - GEOIP,telegram,twitter,社交媒体
+  - GEOIP,twitter,社交媒体
+  - GEOIP,telegram,社交媒体
   - GEOIP,CN,国内
 # 其他流量: 其他
-  - GEOSITE,proxy,gfw,其他
+  - GEOSITE,gfw,其他
   - RULE-SET,tld-not-cn,其他
   - MATCH,其他
 
@@ -269,3 +297,6 @@ rule-providers:
   tld-not-cn:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
+  applications:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
