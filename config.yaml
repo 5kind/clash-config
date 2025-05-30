@@ -1,6 +1,6 @@
 ######### 锚点 start #######
 # 策略组相关
-pr: &pr {type: select, proxies: [默认, 香港, 香港自动选择, 台湾, 台湾自动选择, 日本, 日本自动选择, 新加坡, 新加坡自动选择, 美国, 美国自动选择, 其它地区, 全部节点, 自动选择, 直连]}
+pr: &pr {type: select, proxies: [默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择, 直连]}
 #这里是订阅更新和延迟测试相关的
 p: &p {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -171,63 +171,54 @@ proxies:
 - name: "直连"
   type: direct
   udp: true
-proxy-groups:
-- {name: 默认, type: select, proxies: [自动选择, 直连, 香港, 香港自动选择, 台湾, 台湾自动选择, 日本, 日本自动选择, 新加坡, 新加坡自动选择, 美国, 美国自动选择, 其它地区, 全部节点],
+proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW, 其他
+- {name: 默认, type: select, proxies: [自动选择, 直连, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: Google, <<: *pr,
+- {name: 学术资源, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
-- {name: Apple, <<: *pr,
- icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Apple.png}
-- {name: Telegram, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Telegram.png"}
-- {name: Twitter, <<: *pr,
+- {name: 人工智能, <<: *pr,
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
+- {name: 云存储, <<: *pr,
+ icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png}
+- {name: 社交媒体, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
-- {name: ehentai, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Panda.png"}
-- {name: 哔哩哔哩, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/bilibili.png"}
-- {name: 哔哩东南亚, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/bilibili.png"}
-- {name: 巴哈姆特, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bahamut.png"}
-- {name: YouTube, <<: *pr,
+- {name: 游戏平台, <<: *pr,
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
+- {name: 流媒体, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NETFLIX, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Netflix.png"}
-- {name: Spotify, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Spotify.png"}
-- {name: 国内, type: select, proxies: [直连, 默认, 香港, 香港自动选择, 台湾, 台湾自动选择, 日本, 日本自动选择, 新加坡, 新加坡自动选择, 美国, 美国自动选择, 其它地区, 全部节点, 自动选择],
+- {name: NSFW, <<: *pr,
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
+- {name: 国内, type: select, proxies: [直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
+- {name: 阻断, type: select, proxies: [REJECT, 直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择],
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
 - {name: 其他, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  #分隔,下面是地区分组
+  #分隔,下面是地区分组：专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 自动选择, 全部节点
+- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
+- {name: 专线, type: select, include-all: true, filter: "(?i)(专|專)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
 - {name: 香港, type: select, include-all: true, filter: "(?i)(?!直连)(港|hk|hongkong|hong kong)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/HK.png"}
 - {name: 台湾, type: select, include-all: true, filter: "(?i)(?!直连)(台|tw|taiwan)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TW.png"}
 - {name: 日本, type: select, include-all: true, filter: "(?i)(?!直连)(日|jp|japan)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/JP.png"}
+- {name: 韩国, type: select, include-all: true, filter: "(?i)(韩|kr)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Korea.png"}
+- {name: 英国, type: select, include-all: true, filter: "(?i)英|uk",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/UK.png"}
 - {name: 美国, type: select, include-all: true, filter: "(?i)(?!直连)(美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/US.png"}
-- {name: 新加坡, type: select, include-all: true, filter: "(?i)(?!直连)(新|sg|singapore)",
+- {name: 新加坡, type: select, include-all: true, filter: "(?i)(?!直连)(新加坡|sg|singapore)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates|直连)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 10,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
 - {name: 全部节点, type: select, include-all: true,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
-
-- {name: 香港自动选择,type: url-test, include-all: true, filter: "(?i)(?!直连)(港|hk|hongkong|hong kong)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/HK.png"}
-- {name: 台湾自动选择,type: url-test, include-all: true, filter: "(?i)(?!直连)(台|tw|taiwan)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TW.png"}
-- {name: 日本自动选择,type: url-test, include-all: true, filter: "(?i)(?!直连)(日|jp|japan)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/JP.png"}
-- {name: 美国自动选择,type: url-test, include-all: true, filter: "(?i)(?!直连)(美|us|unitedstates|united states)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/US.png"}
-- {name: 新加坡自动选择,type: url-test, include-all: true, filter: "(?i)(新|sg|singapore)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
 
 rules:
 # 直连:     直连
@@ -242,16 +233,16 @@ rules:
   - RULE-SET,reject,阻断
   - GEOSITE,adobe,category-ads-all,win-spy,win-extra,阻断
   - GEOIP,ad,阻断
-# 代理分流: 国内,学术资源,云服务,游戏平台,人工智能,流媒体,社交媒体,NSFW,其他
+# 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW
   # GEOSITE:
   - GEOSITE,apple@cn,steam@cn,google@cn,bilibili,tencent,国内
   # - GEOSITE,amazon,speedtest,paypal,其他
   - GEOSITE,github,学术资源
-  - GEOSITE,pikpak,onedrive,云服务
-  - GEOSITE,steam,ubisoft,游戏平台
   - GEOSITE,openai,google,microsoft,perplexity,人工智能
-  - GEOSITE,youtube,netflix,bahamut,spotify,disney,hulu,hbo,流媒体
+  - GEOSITE,pikpak,onedrive,云存储
   - GEOSITE,twitter,facebook,telegram,discord,reddit,tiktok,社交媒体
+  - GEOSITE,steam,ubisoft,游戏平台
+  - GEOSITE,youtube,netflix,bahamut,spotify,disney,hulu,hbo,流媒体
   - GEOSITE,pornhub,pixiv,18comic,ehentai,NSFW
   - GEOSITE,CN,国内
   - GEOSITE,geolocation-!cn,其他
@@ -260,7 +251,7 @@ rules:
   - GEOIP,netflix,流媒体
   - GEOIP,telegram,twitter,社交媒体
   - GEOIP,CN,国内
-# 其他流量
+# 其他流量: 其他
   - GEOSITE,proxy,gfw,其他
   - RULE-SET,tld-not-cn,其他
   - MATCH,其他
