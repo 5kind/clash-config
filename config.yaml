@@ -230,91 +230,51 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
 
 rules:
-- GEOIP,lan,直连,no-resolve
-- RULE-SET,biliintl_domain,哔哩东南亚
-- RULE-SET,ehentai_domain,ehentai
-- RULE-SET,github_domain,其他
-- RULE-SET,twitter_domain,Twitter
-- RULE-SET,youtube_domain,YouTube
-- RULE-SET,google_domain,Google
-- RULE-SET,telegram_domain,Telegram
-- RULE-SET,netflix_domain,NETFLIX
-- RULE-SET,bilibili_domain,哔哩哔哩
-- RULE-SET,bahamut_domain,巴哈姆特
-- RULE-SET,spotify_domain,Spotify
-- RULE-SET,pixiv_domain,其他
-- RULE-SET,geolocation-!cn,其他
-
-- RULE-SET,google_ip,Google
-- RULE-SET,netflix_ip,NETFLIX
-- RULE-SET,telegram_ip,Telegram
-- RULE-SET,twitter_ip,Twitter
-- RULE-SET,cn_domain,国内
-- RULE-SET,cn_ip,国内
-- MATCH,其他
+# 直连:     直连
+  - GEOIP,private,lan,直连,no-resolve
+  - GEOSITE,private,直连,no-resolve
+  - RULE-SET,applications,DIRECT
+  - DOMAIN-SUFFIX,smtp,DIRECT
+  - DOMAIN-KEYWORD,aria2,DIRECT
+  - DOMAIN-SUFFIX,lancache.steamcontent.com,DIRECT
+  - DOMAIN-SUFFIX,live.cn,DIRECT
+# 规则阻断: 阻断
+  - RULE-SET,reject,阻断
+  - GEOSITE,adobe,category-ads-all,win-spy,win-extra,阻断
+  - GEOIP,ad,阻断
+# 代理分流: 国内,学术资源,云服务,游戏平台,人工智能,流媒体,社交媒体,NSFW,其他
+  # GEOSITE:
+  - GEOSITE,apple@cn,steam@cn,google@cn,bilibili,tencent,国内
+  # - GEOSITE,amazon,speedtest,paypal,其他
+  - GEOSITE,github,学术资源
+  - GEOSITE,pikpak,onedrive,云服务
+  - GEOSITE,steam,ubisoft,游戏平台
+  - GEOSITE,openai,google,microsoft,perplexity,人工智能
+  - GEOSITE,youtube,netflix,bahamut,spotify,disney,hulu,hbo,流媒体
+  - GEOSITE,twitter,facebook,telegram,discord,reddit,tiktok,社交媒体
+  - GEOSITE,pornhub,pixiv,18comic,ehentai,NSFW
+  - GEOSITE,CN,国内
+  - GEOSITE,geolocation-!cn,其他
+  # GEOIP:
+  - GEOIP,google,人工智能
+  - GEOIP,netflix,流媒体
+  - GEOIP,telegram,twitter,社交媒体
+  - GEOIP,CN,国内
+# 其他流量
+  - GEOSITE,proxy,gfw,其他
+  - RULE-SET,tld-not-cn,其他
+  - MATCH,其他
 
 rule-anchor:
   ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: text}
   domain: &domain {type: http, interval: 86400, behavior: domain, format: text}
 rule-providers:
-  private:
+  reject:
     <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.list"
-  cn_domain:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+  direct:
     <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.list"
-  biliintl_domain:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+  tld-not-cn:
     <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.list"
-  ehentai_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ehentai.list"
-  github_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.list"
-  twitter_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.list"
-  youtube_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.list"
-  google_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.list"
-  telegram_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.list"
-  netflix_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.list"
-  bilibili_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.list"
-  bahamut_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bahamut.list"
-  spotify_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.list"
-  pixiv_domain:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pixiv.list"
-  geolocation-!cn:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.list"
-
-  cn_ip:
-    <<: *ip
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list"
-  google_ip:
-    <<: *ip
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.list"
-  netflix_ip:
-    <<: *ip
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.list"
-  twitter_ip:
-    <<: *ip
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.list"
-  telegram_ip:
-    <<: *ip
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.list"
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
