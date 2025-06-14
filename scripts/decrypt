@@ -2,9 +2,9 @@
 
 # 解密脚本: scripts/decrypt (供 GitHub Action 调用)
 
-# GIST_PAT 将通过环境变量由 GitHub Action 传入
+# GIST_ID 将通过环境变量由 GitHub Action 传入
 if [ -z "$1" ]; then
-  echo "错误：解密密钥 (GIST_PAT) 未提供。"
+  echo "错误：解密密钥 (GIST_ID) 未提供。"
   echo "此脚本应由 GitHub Action 调用，并通过参数传入密钥。"
   exit 1
 fi

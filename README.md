@@ -1,9 +1,9 @@
 # clash-config
 一个简易的clash config模板，github action自动推送更新到gist
  - [config.yaml](./config.yaml) clash config模板，包含规则等，不含订阅；
- - [config.diff.enc](patch/config.diff.enc) 通过`GIST_PAT`加密的patch文件；
- - [encrypt](scripts/encrypt) 运行`encrypt <GIST_PAT>`将`config.diff`加密到`config.diff.enc`，注：如果有[GIST_PAT](GIST_PAT)文件，可以直接运行`encrypt`加密，为用户端调用
- - [decrypt](scripts/decrypt) 运行`decrypt <GIST_PAT>`将`config.diff.enc`解密到`config.diff`，为github action调用
+ - [config.diff.enc](patch/config.diff.enc) 通过`GIST_ID`加密的patch文件；
+ - [encrypt](scripts/encrypt) 运行`encrypt <GIST_ID>`将`config.diff`加密到`config.diff.enc`，注：如果有[GIST_ID](GIST_ID)文件，可以直接运行`encrypt`加密，为用户端调用
+ - [decrypt](scripts/decrypt) 运行`decrypt <GIST_ID>`将`config.diff.enc`解密到`config.diff`，为github action调用
 # 使用方法
 1. 创建私有 Gist
  - 创建一个 Secret Gist;
@@ -24,6 +24,16 @@
 修改模板与加密patch：
 - 修改自用clash config模板到[config.yaml](./config.yaml)；
 - 将以上模板与完整config（含订阅）的diff文件到`patch/config.diff`，切记不要将其添加到仓库
-- 运行`scripts/encrypt <GIST_PAT>`将`config.diff`加密
+- 运行`scripts/encrypt <GIST_ID>`将`config.diff`加密
 - `config.yaml`、`config.diff.enc`需要上传到仓库
 push后，github action应当生成正确的gist文件。
+# 协作方法
+### 更新配置与规则：
+- 自行修改[config.yaml](./config.yaml)；
+- push后，github action应当自动更新gist。
+### 更新订阅：
+- 修改[config.yaml](./config.yaml)中的订阅链接；
+- 保存文件，使用`git diff > patch/config.diff`，不要提交此diff文件；
+- 撤销[config.yaml](./config.yaml)的修改，不要提交；
+- 运行`scripts/encrypt <GIST_ID>`将`config.diff`加密，将`config.diff.enc`上传到仓库；
+- push后，github action应当自动更新gist。

@@ -2,19 +2,19 @@
 
 # 加密脚本: scripts/encrypt
 
-# 检查是否提供了 GIST_PAT 参数或存在 GIST_PAT 文件
+# 检查是否提供了 GIST_ID 参数或存在 GIST_ID 文件
 if [ -n "$1" ]; then
-  GIST_PAT_VALUE="$1"
-elif [ -f "GIST_PAT" ]; then
-  GIST_PAT_VALUE=$(cat GIST_PAT)
+  GIST_ID_VALUE="$1"
+elif [ -f "GIST_ID" ]; then
+  GIST_ID_VALUE=$(cat GIST_ID)
 else
-  echo "错误：请提供 GIST_PAT 作为参数，或者在当前目录下创建 GIST_PAT 文件并填入 PAT 内容。"
-  echo "用法: $0 [GIST_PAT_value]"
+  echo "错误：请提供 GIST_ID 作为参数，或者在当前目录下创建 GIST_ID 文件并填入 PAT 内容。"
+  echo "用法: $0 [GIST_ID_value]"
   exit 1
 fi
 
-if [ -z "$GIST_PAT_VALUE" ]; then
-  echo "错误：GIST_PAT 值为空。"
+if [ -z "$GIST_ID_VALUE" ]; then
+  echo "错误：GIST_ID 值为空。"
   exit 1
 fi
 
@@ -36,12 +36,12 @@ if [ ! -f "$DIFF_FILE" ]; then
   exit 1
 fi
 
-echo "正在使用 GIST_PAT 加密 $DIFF_FILE 到 $ENCRYPTED_FILE ..."
+echo "正在使用 GIST_ID 加密 $DIFF_FILE 到 $ENCRYPTED_FILE ..."
 
 # 使用 openssl 进行 AES-256-CBC 加密
 # -pbkdf2 和 -iter 用于增强从密码到密钥的派生过程，提高安全性
 # -salt 默认会添加盐值
-openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -salt -in "$DIFF_FILE" -out "$ENCRYPTED_FILE" -k "$GIST_PAT_VALUE"
+openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -salt -in "$DIFF_FILE" -out "$ENCRYPTED_FILE" -k "$GIST_ID_VALUE"
 
 if [ $? -eq 0 ]; then
   echo "加密成功: $ENCRYPTED_FILE 已生成。"

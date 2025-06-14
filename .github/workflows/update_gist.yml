@@ -25,11 +25,11 @@ jobs:
 
       - name: Decrypt config.diff
         env:
-          # GIST_PAT 将同时用作解密密码和后续Gist操作的令牌
-          DECRYPTION_PASSPHRASE: ${{ secrets.GIST_PAT }}
+          # GIST_ID 将同时用作解密密码
+          DECRYPTION_PASSPHRASE: ${{ secrets.GIST_ID }}
         run: |
           if [ -z "$DECRYPTION_PASSPHRASE" ]; then
-            echo "::error::GIST_PAT (used as decryption passphrase) secret is not set."
+            echo "::error::GIST_ID (used as decryption passphrase) secret is not set."
             exit 1
           fi
           # 调用解密脚本
