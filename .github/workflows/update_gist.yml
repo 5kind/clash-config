@@ -1,0 +1,83 @@
+name: Update Clash Config Gist
+
+on:
+  push:
+    branches:
+      - main  # 或者你的主分支名称，如 master
+    paths: # 仅当模板或加密的diff变化时触发 (可选，但推荐)
+      - 'config.yaml'
+      - 'patch/config.diff.enc'
+
+jobs:
+  build_and_update_gist:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # Action 需要读取仓库中的文件
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/decrypt
+          chmod +x scripts/encrypt
+
+      - name: Decrypt config.diff
+        env:
+          # GIST_PAT 将同时用作解密密码和后续Gist操作的令牌
+          DECRYPTION_PASSPHRASE: ${{ secrets.GIST_PAT }}
+        run: |
+          if [ -z "$DECRYPTION_PASSPHRASE" ]; then
+            echo "::error::GIST_PAT (used as decryption passphrase) secret is not set."
+            exit 1
+          fi
+          # 调用解密脚本
+          ./scripts/decrypt "$DECRYPTION_PASSPHRASE"
+
+      - name: Apply patch to create final config
+        run: |
+          echo "Applying patch to config.yaml..."
+          # -o final_config.yaml 表示输出到新文件，不修改原始的 config.yaml (模板)
+          patch config.yaml config.diff -o final_config.yaml
+
+          if [ $? -ne 0 ]; then
+            echo "::error::Patching failed."
+            exit 1
+          fi
+
+          # 检查最终配置文件是否非空
+          if [ ! -s final_config.yaml ]; then
+            echo "::error::final_config.yaml is empty after patching."
+            exit 1
+          fi
+          echo "final_config.yaml created successfully."
+
+      - name: Update Gist
+        env:
+          GH_TOKEN: ${{ secrets.GIST_PAT }}         # 使用你配置的带 gist 权限的 PAT
+          GIST_ID: ${{ secrets.GIST_ID }}           # Gist 的 ID
+          GIST_FILENAME: ${{ secrets.GIST_FILENAME }} # Gist 中的目标文件名
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GIST_PAT (for Gist operation) secret is not set."
+            exit 1
+          fi
+          if [ -z "$GIST_ID" ]; then
+            echo "::error::GIST_ID secret is not set."
+            exit 1
+          fi
+          if [ -z "$GIST_FILENAME" ]; then
+            echo "::error::GIST_FILENAME secret is not set."
+            exit 1
+          fi
+
+          echo "Updating Gist: $GIST_ID with file: $GIST_FILENAME using content from local final_config.yaml"
+          # 为了确保gh cli正确更新Gist中指定的文件名，我们将本地生成的final_config.yaml
+          # 先重命名为Gist中期望的文件名。
+          mv final_config.yaml "$GIST_FILENAME"
+
+          # 使用 GitHub CLI (gh) 更新 Gist
+          gh gist edit "$GIST_ID" "$GIST_FILENAME"
+
+          echo "Gist updated successfully."

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# 加密脚本: scripts/encrypt
+
+# 检查是否提供了 GIST_PAT 参数或存在 GIST_PAT 文件
+if [ -n "$1" ]; then
+  GIST_PAT_VALUE="$1"
+elif [ -f "GIST_PAT" ]; then
+  GIST_PAT_VALUE=$(cat GIST_PAT)
+else
+  echo "错误：请提供 GIST_PAT 作为参数，或者在当前目录下创建 GIST_PAT 文件并填入 PAT 内容。"
+  echo "用法: $0 [GIST_PAT_value]"
+  exit 1
+fi
+
+if [ -z "$GIST_PAT_VALUE" ]; then
+  echo "错误：GIST_PAT 值为空。"
+  exit 1
+fi
+
+# 定义输入和输出文件路径
+DIFF_FILE="patch/config.diff"
+ENCRYPTED_FILE="patch/config.diff.enc"
+PATCH_DIR="patch"
+
+# 检查 patch 目录是否存在，不存在则创建
+if [ ! -d "$PATCH_DIR" ]; then
+  mkdir -p "$PATCH_DIR"
+  echo "已创建目录: $PATCH_DIR"
+fi
+
+# 检查 config.diff 是否存在
+if [ ! -f "$DIFF_FILE" ]; then
+  echo "错误：差异文件 $DIFF_FILE 未找到。"
+  echo "请先生成 $DIFF_FILE 文件。"
+  exit 1
+fi
+
+echo "正在使用 GIST_PAT 加密 $DIFF_FILE 到 $ENCRYPTED_FILE ..."
+
+# 使用 openssl 进行 AES-256-CBC 加密
+# -pbkdf2 和 -iter 用于增强从密码到密钥的派生过程，提高安全性
+# -salt 默认会添加盐值
+openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -salt -in "$DIFF_FILE" -out "$ENCRYPTED_FILE" -k "$GIST_PAT_VALUE"
+
+if [ $? -eq 0 ]; then
+  echo "加密成功: $ENCRYPTED_FILE 已生成。"
+  echo "请勿将原始的 $DIFF_FILE 文件提交到仓库。"
+else
+  echo "错误：加密失败。"
+  exit 1
+fi

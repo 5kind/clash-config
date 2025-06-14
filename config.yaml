@@ -1,6 +1,6 @@
 ######### 锚点 start #######
 # 策略组相关
-pr: &pr {type: select, proxies: [默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择, 直连]}
+pr: &pr {type: select, proxies: [默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择, 直连]}
 #这里是订阅更新和延迟测试相关的
 p: &p {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -172,11 +172,11 @@ proxies:
   type: direct
   udp: true
 proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW, 其他
-- {name: 默认, type: select, proxies: [自动选择, 直连, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点],
+- {name: 默认, type: select, proxies: [自动选择, 直连, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术资源, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
-- {name: 人工智能, <<: *pr,
+- {name: 人工智能, type: select, proxies: [ChatGPT, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, 其它地区, 全部节点, 自动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
 - {name: 云存储, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
@@ -188,9 +188,9 @@ proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
 - {name: NSFW, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
-- {name: 国内, type: select, proxies: [直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择],
+- {name: 国内, type: select, proxies: [直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
-- {name: 阻断, type: select, proxies: [REJECT, 直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 全部节点, 自动选择],
+- {name: 阻断, type: select, proxies: [REJECT, 直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
 - {name: 其他, <<: *pr,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
@@ -213,7 +213,11 @@ proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/US.png"}
 - {name: 新加坡, type: url-test, include-all: true, filter: "(?i)(新加坡|sg|singapore)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
-- {name: 其它地区, type: url-test, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk)).*",
+- {name: 越南, type: url-test, include-all: true, filter: "(?i)(越南|vn|vietnam)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Rocket.png"}
+- {name: ChatGPT, type: url-test, include-all: true, filter: "(?i)(ChatGPT)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
+- {name: 其它地区, type: url-test, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 10, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
@@ -233,8 +237,8 @@ rules:
 # 规则阻断: 阻断
   - RULE-SET,reject,阻断
   - GEOSITE,adobe,阻断
-  - GEOSITE,win-spy,阻断
-  - GEOSITE,win-extra,阻断
+#   - GEOSITE,win-spy,阻断
+#   - GEOSITE,win-extra,阻断
   - GEOSITE,category-ads-all,阻断
   - GEOIP,ad,阻断
 # 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW
@@ -245,7 +249,7 @@ rules:
   - GEOSITE,epicgames@cn,国内
   - GEOSITE,github,学术资源
   - GEOSITE,openai,人工智能
-  - GEOSITE,google,人工智能
+  - GEOSITE,google-gemini,人工智能
   - GEOSITE,microsoft,人工智能
   - GEOSITE,pikpak,云存储
   - GEOSITE,onedrive,云存储
