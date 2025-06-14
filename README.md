@@ -9,7 +9,7 @@
  - 创建一个 Secret Gist;
  - 在 Gist 中添加一个文件，文件名可以自定，例如 clash_profile.yaml (这个文件名稍后会用作 Secret)。初始内容可以为空;
  - 记下这个 Gist 的 ID (通常是 Gist URL 中你的用户名之后的那串字符);
- - gist.github.com/<username>/<GIST_ID>/raw/<GIST_FILENAME>为你需要的订阅链接。
+ - gist.github.com/<USERNAME>/<GIST_ID>/raw/<GIST_FILENAME>为你需要的订阅链接。
 2. Fork 并修改此仓库（推荐使用私密仓库）；  
 - 仓库中设置 Secrets：
 - 进入你的 clash-config 仓库 -> Settings -> Secrets and variables -> Actions -> "New repository secret"
