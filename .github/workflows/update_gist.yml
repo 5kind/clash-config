@@ -40,7 +40,7 @@ jobs:
         run: |
           echo "Applying patch to config.yaml..."
           # -o final_config.yaml 表示输出到新文件，不修改原始的 config.yaml (模板)
-          patch config.yaml config.diff -o final_config.yaml
+          patch config.yaml patch/config.diff -o final_config.yaml
 
           if [ $? -ne 0 ]; then
             echo "::error::Patching failed."
@@ -53,35 +53,52 @@ jobs:
             exit 1
           fi
           echo "final_config.yaml created successfully."
-
-      - name: Download and Test Configuration with mihomo (DEB)
-        run: |
-          echo "Fetching the latest mihomo .deb package URL..."
-          # 使用 GitHub API 和 jq 工具动态查找最新的 linux-amd64 .deb 文件的下载链接
-          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64") and endswith(".deb")) | .browser_download_url')
           
-          # 检查是否成功获取到 URL
+      - name: Get latest mihomo version tag
+        id: get_version # 给这个步骤一个ID，方便后面引用它的输出
+        run: |
+          # 从API获取最新版本号，并将其设置为该步骤的输出变量
+          VERSION_TAG=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r .tag_name)
+          echo "Latest mihomo version is: $VERSION_TAG"
+          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
+
+      - name: Cache mihomo package
+        id: cache_mihomo # 给这个步骤一个ID
+        uses: actions/cache@v4
+        with:
+          # 缓存的路径，我们将把下载的 .deb 文件放在这里
+          path: /tmp/mihomo.deb
+          # 缓存的 key，由操作系统和 mihomo 版本号组成
+          # 当 mihomo 版本更新时，key 会变化，导致缓存失效，从而触发重新下载
+          key: ${{ runner.os }}-mihomo-${{ steps.get_version.outputs.VERSION_TAG }}
+
+      - name: Download and install mihomo (if not cached)
+        # 仅当上一步 cache_mihomo 的输出 cache-hit 不为 'true' 时，才执行此步骤
+        if: steps.cache_mihomo.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss. Downloading new version..."
+          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64") and endswith(".deb")) | .browser_download_url')
           if [ -z "$DEB_URL" ]; then
             echo "::error::Could not find the download URL for the mihomo .deb package."
             exit 1
           fi
-
           echo "Downloading from: $DEB_URL"
-          # 下载并安装 .deb 文件
-          wget -q -O mihomo-latest.deb "$DEB_URL"
+          wget -q -O /tmp/mihomo.deb "$DEB_URL"
+          
+      - name: Install mihomo from cache or download
+        run: |
           echo "Installing mihomo package..."
-          sudo apt-get install ./mihomo-latest.deb
+          sudo apt-get install /tmp/mihomo.deb
 
+      - name: Validate final_config.yaml
+        run: |
           echo "Validating final_config.yaml..."
           mihomo -t final_config.yaml
-          
-          # 检查上一条命令（mihomo -t）的退出码
           if [ $? -ne 0 ]; then
-            echo "::error::Configuration check failed for final_config.yaml. Aborting Gist update."
+            echo "::error::Configuration check failed for final_config.yaml."
             exit 1
-          else
-            echo "Configuration check passed successfully."
           fi
+          echo "Configuration check passed."
 
       - name: Update Gist
         env:

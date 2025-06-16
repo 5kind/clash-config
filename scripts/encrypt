@@ -1,52 +1,127 @@
 #!/bin/bash
+#
+# Unified Encryption/Decryption Script for Clash Config Patch
+#
+# This script performs encryption or decryption based on the name it is called with.
+# - As 'encrypt' (or any name other than 'decrypt'): Encrypts the patch file.
+# - As 'decrypt': Decrypts the patch file.
+#
+# To maintain compatibility, create a symbolic link:
+#   ln -s encrypt decrypt
 
-# 加密脚本: scripts/encrypt
+# ==============================================================================
+# ---                           Configuration                            ---
+# ==============================================================================
 
-# 检查是否提供了 GIST_ID 参数或存在 GIST_ID 文件
-if [ -n "$1" ]; then
-  GIST_ID_VALUE="$1"
-elif [ -f "GIST_ID" ]; then
-  GIST_ID_VALUE=$(cat GIST_ID)
+# File and Directory Paths
+readonly PATCH_DIR="patch"
+readonly DIFF_FILE="${PATCH_DIR}/config.diff"
+readonly ENCRYPTED_FILE="${PATCH_DIR}/config.diff.enc"
+readonly KEY_FILE="secret/GIST_ID" # Local file to store the key for encryption
+
+# OpenSSL Parameters (must be identical for encryption and decryption)
+readonly CIPHER="aes-256-cbc"
+readonly KDF_OPTS="-pbkdf2 -iter 100000"
+
+# ==============================================================================
+# ---                            Core Functions                            ---
+# ==============================================================================
+
+# --- Encryption Logic ---
+encrypt_logic() {
+    local key
+
+    # Determine the key from command-line argument or local file
+    if [ -n "$1" ]; then
+        key="$1"
+    elif [ -f "$KEY_FILE" ]; then
+        key=$(cat "$KEY_FILE")
+    else
+        echo "错误：请提供 GIST_ID 作为参数，或者在当前目录下创建 secret/GIST_ID 文件。" >&2
+        echo "用法: $0 [GIST_ID_value]" >&2
+        exit 1
+    fi
+
+    if [ -z "$key" ]; then
+        echo "错误：GIST_ID (密钥) 值为空。" >&2
+        exit 1
+    fi
+
+    # Ensure patch directory exists
+    if [ ! -d "$PATCH_DIR" ]; then
+        mkdir -p "$PATCH_DIR"
+        echo "已创建目录: $PATCH_DIR"
+    fi
+
+    # Ensure source diff file exists
+    if [ ! -f "$DIFF_FILE" ]; then
+        echo "错误：差异文件 '$DIFF_FILE' 未找到。" >&2
+        echo "请先生成 '$DIFF_FILE' 文件。" >&2
+        exit 1
+    fi
+
+    echo "正在使用提供的密钥加密 '$DIFF_FILE' 到 '$ENCRYPTED_FILE' ..."
+
+    # Encrypt using OpenSSL with a salt (default)
+    openssl enc "-${CIPHER}" ${KDF_OPTS} -salt -in "$DIFF_FILE" -out "$ENCRYPTED_FILE" -k "$key"
+
+    if [ $? -eq 0 ]; then
+        echo "加密成功: '$ENCRYPTED_FILE' 已生成。"
+        echo "重要提示：请勿将原始的 '$DIFF_FILE' 文件提交到仓库。"
+    else
+        echo "错误：加密失败。" >&2
+        exit 1
+    fi
+}
+
+# --- Decryption Logic ---
+decrypt_logic() {
+    local key="$1"
+
+    if [ -z "$key" ]; then
+        echo "错误：解密密钥未提供。" >&2
+        echo "此脚本应由 GitHub Action 调用，并通过参数传入密钥。" >&2
+        exit 1
+    fi
+
+    if [ ! -f "$ENCRYPTED_FILE" ]; then
+        echo "错误：加密文件 '$ENCRYPTED_FILE' 未找到。" >&2
+        exit 1
+    fi
+
+    echo "正在解密 '$ENCRYPTED_FILE' 到 '$DIFF_FILE' ..."
+
+    # Decrypt using OpenSSL
+    openssl enc "-${CIPHER}" -d ${KDF_OPTS} -in "$ENCRYPTED_FILE" -out "$DIFF_FILE" -k "$key"
+
+    if [ $? -eq 0 ]; then
+        if [ -s "$DIFF_FILE" ]; then
+            echo "解密成功: '$DIFF_FILE' 已生成。"
+        else
+            echo "错误：解密失败或解密后的文件为空。" >&2
+            rm -f "$DIFF_FILE" # Clean up potentially generated empty file
+            exit 1
+        fi
+    else
+        echo "错误：解密命令执行失败。" >&2
+        exit 1
+    fi
+}
+
+
+# ==============================================================================
+# ---                         Main Dispatch Logic                          ---
+# ==============================================================================
+
+# Get the name used to call the script
+readonly SCRIPT_NAME=$(basename "$0")
+
+# Decide which function to call based on the script name
+if [ "$SCRIPT_NAME" = "decrypt" ]; then
+    # Pass all command-line arguments to the decryption function
+    decrypt_logic "$@"
 else
-  echo "错误：请提供 GIST_ID 作为参数，或者在当前目录下创建 GIST_ID 文件并填入 PAT 内容。"
-  echo "用法: $0 [GIST_ID_value]"
-  exit 1
-fi
-
-if [ -z "$GIST_ID_VALUE" ]; then
-  echo "错误：GIST_ID 值为空。"
-  exit 1
-fi
-
-# 定义输入和输出文件路径
-DIFF_FILE="patch/config.diff"
-ENCRYPTED_FILE="patch/config.diff.enc"
-PATCH_DIR="patch"
-
-# 检查 patch 目录是否存在，不存在则创建
-if [ ! -d "$PATCH_DIR" ]; then
-  mkdir -p "$PATCH_DIR"
-  echo "已创建目录: $PATCH_DIR"
-fi
-
-# 检查 config.diff 是否存在
-if [ ! -f "$DIFF_FILE" ]; then
-  echo "错误：差异文件 $DIFF_FILE 未找到。"
-  echo "请先生成 $DIFF_FILE 文件。"
-  exit 1
-fi
-
-echo "正在使用 GIST_ID 加密 $DIFF_FILE 到 $ENCRYPTED_FILE ..."
-
-# 使用 openssl 进行 AES-256-CBC 加密
-# -pbkdf2 和 -iter 用于增强从密码到密钥的派生过程，提高安全性
-# -salt 默认会添加盐值
-openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -salt -in "$DIFF_FILE" -out "$ENCRYPTED_FILE" -k "$GIST_ID_VALUE"
-
-if [ $? -eq 0 ]; then
-  echo "加密成功: $ENCRYPTED_FILE 已生成。"
-  echo "请勿将原始的 $DIFF_FILE 文件提交到仓库。"
-else
-  echo "错误：加密失败。"
-  exit 1
+    # Called by any other name (e.g., 'encrypt'), run encryption
+    # Pass all command-line arguments to the encryption function
+    encrypt_logic "$@"
 fi
