@@ -73,7 +73,7 @@ jobs:
           sudo apt-get install ./mihomo-latest.deb
 
           echo "Validating final_config.yaml..."
-          mihomo -t -d . -f final_config.yaml
+          mihomo -t final_config.yaml
           
           # 检查上一条命令（mihomo -t）的退出码
           if [ $? -ne 0 ]; then
