@@ -7,6 +7,7 @@ on:
     paths: # 仅当模板或加密的diff变化时触发 (可选，但推荐)
       - 'config.yaml'
       - 'patch/config.diff.enc'
+  workflow_dispatch:
 
 jobs:
   build_and_update_gist:
@@ -52,6 +53,35 @@ jobs:
             exit 1
           fi
           echo "final_config.yaml created successfully."
+
+      - name: Download and Test Configuration with mihomo (DEB)
+        run: |
+          echo "Fetching the latest mihomo .deb package URL..."
+          # 使用 GitHub API 和 jq 工具动态查找最新的 linux-amd64 .deb 文件的下载链接
+          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64") and endswith(".deb")) | .browser_download_url')
+          
+          # 检查是否成功获取到 URL
+          if [ -z "$DEB_URL" ]; then
+            echo "::error::Could not find the download URL for the mihomo .deb package."
+            exit 1
+          fi
+
+          echo "Downloading from: $DEB_URL"
+          # 下载并安装 .deb 文件
+          wget -q -O mihomo-latest.deb "$DEB_URL"
+          echo "Installing mihomo package..."
+          sudo apt-get install ./mihomo-latest.deb
+
+          echo "Validating final_config.yaml..."
+          mihomo -t -d . -f final_config.yaml
+          
+          # 检查上一条命令（mihomo -t）的退出码
+          if [ $? -ne 0 ]; then
+            echo "::error::Configuration check failed for final_config.yaml. Aborting Gist update."
+            exit 1
+          else
+            echo "Configuration check passed successfully."
+          fi
 
       - name: Update Gist
         env:
