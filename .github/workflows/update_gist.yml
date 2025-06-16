@@ -22,7 +22,6 @@ jobs:
       - name: Make scripts executable
         run: |
           chmod +x scripts/decrypt
-          chmod +x scripts/encrypt
 
       - name: Decrypt config.diff
         env:
@@ -81,7 +80,7 @@ jobs:
           # 使用年份和月份作为 key，实现按月更新 GeoIP 数据库
           key: ${{ runner.os }}-mihomo-data-$(date -u +'%Y-%m')
 
-      - name: Download and install mihomo (if not cached)
+      - name: Download mihomo if not cached
         # 仅当上一步 cache_mihomo 的输出 cache-hit 不为 'true' 时，才执行此步骤
         if: steps.cache_mihomo.outputs.cache-hit != 'true'
         run: |
