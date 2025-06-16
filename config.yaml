@@ -1,22 +1,22 @@
 ######### 锚点 start #######
 # 策略组相关
-默认策略: &默认策略 {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-优先直连: &优先直连 {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-保持登录: &保持登录 {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
-解锁AI: &解锁AI {type: select, proxies: [ChatGPT, TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-解锁流媒体: &解锁流媒体 {type: select, proxies: [TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-优先阻断: &优先阻断 {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+unlock-ai: &unlock-ai {type: select, proxies: [ChatGPT, TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+unlock-streaming: &unlock-streaming {type: select, proxies: [TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
+priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
-p: &p {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
+health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
 
 # url 里填写自己的订阅,名称不能重复
 proxy-providers:
   provider1:
-    <<: *p
+    <<: *health-check-gstatic
     url: ""
   provider2:
-    <<: *p
+    <<: *health-check-gstatic
     url: ""
 ipv6: true
 allow-lan: true
@@ -185,25 +185,25 @@ proxies:
 proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交媒体, 游戏平台, 流媒体, 云存储, NSFW, 国内, 阻断, 其他
 - {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 学术资源, <<: *默认策略,
+- {name: 学术资源, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
-- {name: 人工智能, <<: *解锁AI,
+- {name: 人工智能, <<: *unlock-ai,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
-- {name: 社交媒体, <<: *默认策略,
+- {name: 社交媒体, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
-- {name: 游戏平台, <<: *默认策略,
+- {name: 游戏平台, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
-- {name: 云存储, <<: *默认策略,
+- {name: 云存储, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 流媒体, <<: *解锁流媒体,
+- {name: 流媒体, <<: *unlock-streaming,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *保持登录,
+- {name: NSFW, <<: *consistent-hashing,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
-- {name: 国内, <<: *优先直连,
+- {name: 国内, <<: *priority-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
-- {name: 阻断, <<: *优先阻断,
+- {name: 阻断, <<: *priority-reject,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
-- {name: 其他, <<: *默认策略,
+- {name: 其他, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
   # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",  
