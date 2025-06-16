@@ -93,7 +93,8 @@ jobs:
       - name: Validate final_config.yaml
         run: |
           echo "Validating final_config.yaml..."
-          mihomo -t final_config.yaml
+          mkdir /tmp/mihomo
+          mihomo -t -d /tmp/mihomo -f final_config.yaml
           if [ $? -ne 0 ]; then
             echo "::error::Configuration check failed for final_config.yaml."
             exit 1
