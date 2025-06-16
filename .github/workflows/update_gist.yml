@@ -71,6 +71,15 @@ jobs:
           # 缓存的 key，由操作系统和 mihomo 版本号组成
           # 当 mihomo 版本更新时，key 会变化，导致缓存失效，从而触发重新下载
           key: ${{ runner.os }}-mihomo-${{ steps.get_version.outputs.VERSION_TAG }}
+          
+      - name: Cache mihomo working directory
+        id: cache_workdir
+        uses: actions/cache@v4
+        with:
+          # 定义一个目录用于存放 mihomo 的数据文件
+          path: /tmp/mihomo
+          # 使用年份和月份作为 key，实现按月更新 GeoIP 数据库
+          key: ${{ runner.os }}-mihomo-data-$(date -u +'%Y-%m')
 
       - name: Download and install mihomo (if not cached)
         # 仅当上一步 cache_mihomo 的输出 cache-hit 不为 'true' 时，才执行此步骤
@@ -93,12 +102,12 @@ jobs:
       - name: Validate final_config.yaml
         run: |
           echo "Validating final_config.yaml..."
-          mkdir /tmp/mihomo
           mihomo -t -d /tmp/mihomo -f final_config.yaml
           if [ $? -ne 0 ]; then
             echo "::error::Configuration check failed for final_config.yaml."
             exit 1
           fi
+          ls /tmp/mihomo
           echo "Configuration check passed."
 
       - name: Update Gist
