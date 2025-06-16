@@ -1,6 +1,11 @@
 ######### 锚点 start #######
 # 策略组相关
-pr: &pr {type: select, proxies: [默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择, 直连]}
+默认策略: &默认策略 {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+优先直连: &优先直连 {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+保持登录: &保持登录 {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
+解锁AI: &解锁AI {type: select, proxies: [ChatGPT, TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+解锁流媒体: &解锁流媒体 {type: select, proxies: [TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+优先阻断: &优先阻断 {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
 p: &p {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -177,57 +182,51 @@ proxies:
 - name: "直连"
   type: direct
   udp: true
-proxy-groups: # 规则分流：直连, 阻断, 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW, 其他
-- {name: 默认, type: select, proxies: [自动选择, 直连, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点],
+proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交媒体, 游戏平台, 流媒体, 云存储, NSFW, 国内, 阻断, 其他
+- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 学术资源, <<: *pr,
+- {name: 学术资源, <<: *默认策略,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
-- {name: 人工智能, type: select, proxies: [ChatGPT, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, 其它地区, 全部节点, 自动选择, 直连],
+- {name: 人工智能, <<: *解锁AI,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
-- {name: 云存储, <<: *pr,
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 社交媒体, <<: *pr,
+- {name: 社交媒体, <<: *默认策略,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
-- {name: 游戏平台, <<: *pr,
+- {name: 游戏平台, <<: *默认策略,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
-- {name: 流媒体, <<: *pr,
+- {name: 云存储, <<: *默认策略,
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
+- {name: 流媒体, <<: *解锁流媒体,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *pr,
+- {name: NSFW, <<: *默认策略,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
-- {name: 国内, type: select, proxies: [直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择],
+- {name: 国内, <<: *优先直连,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
-- {name: 阻断, type: select, proxies: [REJECT, 直连, 默认, 专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 越南, ChatGPT, 其它地区, 全部节点, 自动选择],
+- {name: 阻断, <<: *优先阻断,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
-- {name: 其他, <<: *pr,
+- {name: 其他, <<: *默认策略,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  #分隔,下面是地区分组：专线, 香港, 台湾, 日本, 韩国, 英国, 美国, 新加坡, 其它地区, 自动选择, 全部节点
-- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 专线, type: url-test, include-all: true, filter: "(?i)(专|專)",
+  # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",  
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
+- {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
-- {name: 香港, type: url-test, include-all: true, filter: "(?i)(港|hk|hongkong|hong kong)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/HK.png"}
-- {name: 台湾, type: url-test, include-all: true, filter: "(?i)(台|tw|taiwan)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TW.png"}
-- {name: 日本, type: url-test, include-all: true, filter: "(?i)(日|jp|japan)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/JP.png"}
-- {name: 韩国, type: url-test, include-all: true, filter: "(?i)(韩|kr)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Korea.png"}
-- {name: 英国, type: url-test, include-all: true, filter: "(?i)(英|uk)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/UK.png"}
-- {name: 美国, type: url-test, include-all: true, filter: "(?i)(美|us|unitedstates|united states)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/US.png"}
-- {name: 新加坡, type: url-test, include-all: true, filter: "(?i)(新加坡|sg|singapore)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/SG.png"}
-- {name: 越南, type: url-test, include-all: true, filter: "(?i)(越南|vn|vietnam)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Rocket.png"}
-- {name: ChatGPT, type: url-test, include-all: true, filter: "(?i)(ChatGPT)",
+- {name: 亚太快速, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)(港|hk|hongkong|hong kong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|越南|vn|vietnam)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
+- {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
+- {name: ChatGPT, type: fallback, include-all: true, interval: 300, filter: "(?i)(ChatGPT)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 其它地区, type: url-test, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
+- {name: TikTok, type: fallback, include-all: true, interval: 300, filter: "(?i)(TikTok)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TikTok.png"}
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 10, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网)).*",
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直连)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 全部节点, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网)).*",
+- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直连)).*",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
+- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直连)).*",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
+- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
