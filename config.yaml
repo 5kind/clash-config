@@ -197,7 +197,7 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
 - {name: 流媒体, <<: *解锁流媒体,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *默认策略,
+- {name: NSFW, <<: *保持登录,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
 - {name: 国内, <<: *优先直连,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
@@ -234,39 +234,62 @@ rules:
   - GEOIP,lan,直连,no-resolve
   - GEOIP,private,直连,no-resolve
   - GEOSITE,private,直连,no-resolve
-  - RULE-SET,applications,DIRECT
-  - DOMAIN-SUFFIX,smtp,DIRECT
-  - DOMAIN-KEYWORD,aria2,DIRECT
-  - DOMAIN-SUFFIX,lancache.steamcontent.com,DIRECT
-  - DOMAIN-SUFFIX,live.cn,DIRECT
+  - RULE-SET,applications,直连
+  - DOMAIN-SUFFIX,smtp,直连
+  - DOMAIN-KEYWORD,aria2,直连
+  - DOMAIN-SUFFIX,lancache.steamcontent.com,直连
+  - DOMAIN-SUFFIX,live.cn,直连
 # 规则阻断: 阻断
   - RULE-SET,reject,阻断
   - GEOSITE,adobe,阻断
-#   - GEOSITE,win-spy,阻断
-#   - GEOSITE,win-extra,阻断
   - GEOSITE,category-ads-all,阻断
-  - GEOIP,ad,阻断
-# 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW
-  # GEOSITE:
-  - GEOSITE,apple@cn,国内
-  - GEOSITE,steam@cn,国内
-  - GEOSITE,google@cn,国内
-  - GEOSITE,epicgames@cn,国内
-  - GEOSITE,github,学术资源
+  # - GEOIP,ad,阻断
+# 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW ,其他
+
+  - GEOSITE,CN,国内
+  - GEOSITE,fastly,国内
+  # - GEOSITE,bing@cn,国内
+  # - GEOSITE,apple@cn,国内
+  # - GEOSITE,steam@cn,国内
+  # - GEOSITE,google@cn,国内
+  # - GEOSITE,epicgames@cn,国内
+  # - GEOSITE,cloudflare@cn,国内
+  - GEOIP,CN,国内
+  - GEOIP,fastly,国内
+  - GEOIP,cloudflare,国内
+  - GEOIP,cloudfront,国内
+
   - GEOSITE,openai,人工智能
-  - GEOSITE,google-gemini,人工智能
   - GEOSITE,microsoft,人工智能
+  - GEOSITE,google-gemini,人工智能
+
+  - GEOSITE,sci,学术资源
+  - GEOSITE,ieee,学术资源
+  - GEOSITE,google,学术资源
+  - GEOSITE,github,学术资源
+  - GEOSITE,sci-hub,学术资源
+  - GEOSITE,z-library,学术资源
+  - GEOSITE,sciencedirect,学术资源
+  - GEOIP,google,学术资源
+  
   - GEOSITE,pikpak,云存储
   - GEOSITE,onedrive,云存储
+
   - GEOSITE,reddit,社交媒体
   - GEOSITE,tiktok,社交媒体
   - GEOSITE,discord,社交媒体
   - GEOSITE,twitter,社交媒体
   - GEOSITE,facebook,社交媒体
   - GEOSITE,telegram,社交媒体
+  - GEOIP,twitter,社交媒体
+  - GEOIP,facebook,社交媒体
+  - GEOIP,telegram,社交媒体
+
+
   - GEOSITE,steam,游戏平台
   - GEOSITE,ubisoft,游戏平台
   - GEOSITE,epicgames,游戏平台
+
   - GEOSITE,hbo,流媒体
   - GEOSITE,hulu,流媒体
   - GEOSITE,abema,流媒体
@@ -276,21 +299,17 @@ rules:
   - GEOSITE,bahamut,流媒体
   - GEOSITE,spotify,流媒体
   - GEOSITE,biliintl,流媒体
+  - GEOIP,netflix,流媒体
+
   - GEOSITE,pixiv,NSFW
   - GEOSITE,pornhub,NSFW
   - GEOSITE,18comic,NSFW
   - GEOSITE,ehentai,NSFW
-  - GEOSITE,CN,国内
+
   - GEOSITE,geolocation-!cn,其他
-  # GEOIP:
-  - GEOIP,google,人工智能
-  - GEOIP,netflix,流媒体
-  - GEOIP,twitter,社交媒体
-  - GEOIP,telegram,社交媒体
-  - GEOIP,CN,国内
 # 其他流量: 其他
-  - GEOSITE,gfw,其他
-  - RULE-SET,tld-not-cn,其他
+  # - GEOSITE,gfw,其他
+  # - RULE-SET,tld-not-cn,其他
   - MATCH,其他
 
 rule-anchor:
@@ -303,9 +322,9 @@ rule-providers:
   direct:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-  tld-not-cn:
-    <<: *domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
+  # tld-not-cn:
+  #   <<: *domain
+  #   url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
   applications:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
