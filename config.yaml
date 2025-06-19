@@ -1,11 +1,11 @@
 ######### 锚点 start #######
 # 策略组相关
-default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-unlock-ai: &unlock-ai {type: select, proxies: [ChatGPT, TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-unlock-streaming: &unlock-streaming {type: select, proxies: [TikTok, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
-priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+unlock-ai: &unlock-ai {type: select, proxies: [ChatGPT, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
+priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
 health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -183,7 +183,7 @@ proxies:
   type: direct
   udp: true
 proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交媒体, 游戏平台, 流媒体, 云存储, NSFW, 国内, 阻断, 其他
-- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
+- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术资源, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
@@ -195,7 +195,7 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
 - {name: 云存储, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 流媒体, <<: *unlock-streaming,
+- {name: 流媒体, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
 - {name: NSFW, <<: *consistent-hashing,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
@@ -205,7 +205,7 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
 - {name: 其他, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, TikTok, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+  # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
@@ -216,8 +216,6 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
 - {name: ChatGPT, type: fallback, include-all: true, interval: 300, filter: "(?i)(ChatGPT)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: TikTok, type: fallback, include-all: true, interval: 300, filter: "(?i)(TikTok)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/TikTok.png"}
 - {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直连)).*",
@@ -243,17 +241,16 @@ rules:
   - RULE-SET,reject,阻断
   - GEOSITE,adobe,阻断
   - GEOSITE,category-ads-all,阻断
-  # - GEOIP,ad,阻断
 # 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW ,其他
 
   - GEOSITE,CN,国内
   - GEOSITE,fastly,国内
-  # - GEOSITE,bing@cn,国内
-  # - GEOSITE,apple@cn,国内
-  # - GEOSITE,steam@cn,国内
-  # - GEOSITE,google@cn,国内
-  # - GEOSITE,epicgames@cn,国内
-  # - GEOSITE,cloudflare@cn,国内
+  - GEOSITE,bing@cn,国内
+  - GEOSITE,apple@cn,国内
+  - GEOSITE,steam@cn,国内
+  - GEOSITE,google@cn,国内
+  - GEOSITE,epicgames@cn,国内
+  - GEOSITE,cloudflare@cn,国内
   - GEOIP,CN,国内
   - GEOIP,fastly,国内
   - GEOIP,cloudflare,国内
@@ -276,7 +273,6 @@ rules:
   - GEOSITE,onedrive,云存储
 
   - GEOSITE,reddit,社交媒体
-  - GEOSITE,tiktok,社交媒体
   - GEOSITE,discord,社交媒体
   - GEOSITE,twitter,社交媒体
   - GEOSITE,facebook,社交媒体
@@ -293,6 +289,7 @@ rules:
   - GEOSITE,hbo,流媒体
   - GEOSITE,hulu,流媒体
   - GEOSITE,abema,流媒体
+  - GEOSITE,tiktok,社交媒体
   - GEOSITE,disney,流媒体
   - GEOSITE,youtube,流媒体
   - GEOSITE,netflix,流媒体
@@ -308,8 +305,6 @@ rules:
 
   - GEOSITE,geolocation-!cn,其他
 # 其他流量: 其他
-  # - GEOSITE,gfw,其他
-  # - RULE-SET,tld-not-cn,其他
   - MATCH,其他
 
 rule-anchor:
@@ -322,9 +317,6 @@ rule-providers:
   direct:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-  # tld-not-cn:
-  #   <<: *domain
-  #   url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
   applications:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
