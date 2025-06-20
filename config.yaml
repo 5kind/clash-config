@@ -228,83 +228,71 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
-# 直连:     直连
+# 1. 直连 (Bypass LAN and Private)
   - GEOIP,lan,直连,no-resolve
   - GEOIP,private,直连,no-resolve
   - GEOSITE,private,直连,no-resolve
   - RULE-SET,applications,直连
   - DOMAIN-SUFFIX,smtp,直连
   - DOMAIN-KEYWORD,aria2,直连
-  - DOMAIN-SUFFIX,lancache.steamcontent.com,直连
   - DOMAIN-SUFFIX,live.cn,直连
-# 规则阻断: 阻断
+# 2. 广告与跟踪器阻断 (Block)
   - RULE-SET,reject,阻断
   - GEOSITE,adobe,阻断
+  - GEOSITE,win-spy,阻断
   - GEOSITE,category-ads-all,阻断
-# 代理分流: 国内, 学术资源, 人工智能, 云存储, 社交媒体, 游戏平台, 流媒体, NSFW ,其他
-
+# 3. 代理分流 (Proxy Groups)
+# - 3.1 国内流量 (Domestic)
+  # geosite
   - GEOSITE,CN,国内
-  - GEOSITE,fastly,国内
   - GEOSITE,bing@cn,国内
   - GEOSITE,apple@cn,国内
-  - GEOSITE,steam@cn,国内
   - GEOSITE,google@cn,国内
-  - GEOSITE,epicgames@cn,国内
   - GEOSITE,cloudflare@cn,国内
+  - GEOSITE,category-game-platforms-download,游戏平台
+  # category
+  - GEOSITE,category-bank-cn,国内
+  - GEOSITE,category-ecommerce@cn,国内
+  - GEOSITE,category-media-cn,国内
+  - GEOSITE,category-scholar-cn,国内
+  - GEOSITE,category-dev-cn,国内
+  - GEOSITE,category-game-accelerator-cn,国内
   - GEOIP,CN,国内
-  - GEOIP,fastly,国内
-  - GEOIP,cloudflare,国内
-  - GEOIP,cloudfront,国内
-
-  - GEOSITE,openai,人工智能
+# - 3.2 人工智能 (AI)
+  - GEOSITE,category-ai-!cn,人工智能
   - GEOSITE,microsoft,人工智能
-  - GEOSITE,google-gemini,人工智能
-
+# - 3.3 学术资源 (Academic)
   - GEOSITE,sci,学术资源
   - GEOSITE,ieee,学术资源
   - GEOSITE,google,学术资源
   - GEOSITE,github,学术资源
-  - GEOSITE,sci-hub,学术资源
-  - GEOSITE,z-library,学术资源
-  - GEOSITE,sciencedirect,学术资源
   - GEOIP,google,学术资源
-  
+# - 3.4 云存储 (Cloud Storage)
   - GEOSITE,pikpak,云存储
   - GEOSITE,onedrive,云存储
-
+  - GEOSITE,dropbox,云存储
+  - GEOSITE,mega,云存储
+# - 3.5 社交媒体 (Social Media)
+  - GEOSITE,category-social-media-!cn,社交媒体
   - GEOSITE,reddit,社交媒体
   - GEOSITE,discord,社交媒体
-  - GEOSITE,twitter,社交媒体
-  - GEOSITE,facebook,社交媒体
   - GEOSITE,telegram,社交媒体
   - GEOIP,twitter,社交媒体
   - GEOIP,facebook,社交媒体
   - GEOIP,telegram,社交媒体
-
-
-  - GEOSITE,steam,游戏平台
-  - GEOSITE,ubisoft,游戏平台
-  - GEOSITE,epicgames,游戏平台
-
-  - GEOSITE,hbo,流媒体
-  - GEOSITE,hulu,流媒体
-  - GEOSITE,abema,流媒体
-  - GEOSITE,tiktok,社交媒体
-  - GEOSITE,disney,流媒体
-  - GEOSITE,youtube,流媒体
-  - GEOSITE,netflix,流媒体
-  - GEOSITE,bahamut,流媒体
-  - GEOSITE,spotify,流媒体
+# - 3.6 游戏平台 (Game Platform)
+  - GEOSITE,category-games,游戏平台
+# - 3.7 流媒体 (Streaming)
+  - GEOSITE,category-entertainment,流媒体
   - GEOSITE,biliintl,流媒体
   - GEOIP,netflix,流媒体
-
+# - 3.8 NSFW (Adult Content)
   - GEOSITE,pixiv,NSFW
-  - GEOSITE,pornhub,NSFW
-  - GEOSITE,18comic,NSFW
+  - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
-
+# - 4. 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他
-# 其他流量: 其他
+  - GEOIP,!cn,其他,no-resolve
   - MATCH,其他
 
 rule-anchor:
