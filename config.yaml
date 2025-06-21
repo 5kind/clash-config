@@ -271,7 +271,7 @@ rules:
 # - 3.3 学术开发 (Academic)
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
-  - GEOSITE,category-scholar-!cn.list,学术开发
+  - GEOSITE,category-scholar-!cn,学术开发
   - GEOSITE,category-cryptocurrency,学术开发
   - GEOSITE,category-anticensorship,学术开发
   - GEOSITE,category-tech-media,学术开发
