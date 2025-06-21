@@ -182,10 +182,10 @@ proxies:
 - name: "直连"
   type: direct
   udp: true
-proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交媒体, 游戏平台, 流媒体, 云存储, NSFW, 国内, 阻断, 其他
+proxy-groups: # 规则分流：默认选择, 学术开发, 人工智能, 社交媒体, 游戏平台, 影音娱乐, 云存储, NSFW, 国内, 阻断, 其他
 - {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 学术资源, <<: *default-proxies,
+- {name: 学术开发, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
 - {name: 人工智能, <<: *unlock-ai,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
@@ -195,7 +195,7 @@ proxy-groups: # 规则分流：默认选择, 学术资源, 人工智能, 社交�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
 - {name: 云存储, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 流媒体, <<: *default-proxies,
+- {name: 影音娱乐, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
 - {name: NSFW, <<: *consistent-hashing,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
@@ -232,6 +232,8 @@ rules:
   - GEOIP,lan,直连,no-resolve
   - GEOIP,private,直连,no-resolve
   - GEOSITE,private,直连,no-resolve
+  - GEOSITE,category-pt,直连,no-resolve
+  - GEOSITE,category-public-tracker,直连,no-resolve
   - RULE-SET,applications,直连
   - DOMAIN-SUFFIX,smtp,直连
   - DOMAIN-KEYWORD,aria2,直连
@@ -251,45 +253,51 @@ rules:
   - GEOSITE,cloudflare@cn,国内
   - GEOSITE,category-game-platforms-download,游戏平台
   # category
+  - GEOSITE,category-dev-cn,国内
   - GEOSITE,category-bank-cn,国内
-  - GEOSITE,category-ecommerce@cn,国内
   - GEOSITE,category-media-cn,国内
   - GEOSITE,category-scholar-cn,国内
-  - GEOSITE,category-dev-cn,国内
+  - GEOSITE,category-ecommerce@cn,国内
   - GEOSITE,category-game-accelerator-cn,国内
   - GEOIP,CN,国内
 # - 3.2 人工智能 (AI)
-  - GEOSITE,category-ai-!cn,人工智能
   - GEOSITE,microsoft,人工智能
-# - 3.3 学术资源 (Academic)
-  - GEOSITE,sci,学术资源
-  - GEOSITE,ieee,学术资源
-  - GEOSITE,google,学术资源
-  - GEOSITE,github,学术资源
-  - GEOIP,google,学术资源
+  - GEOSITE,category-ai-!cn,人工智能
+# - 3.3 学术开发 (Academic)
+  - GEOSITE,category-password-management,学术开发
+  - GEOSITE,category-scholar-\!cn.list,学术开发
+  - GEOSITE,category-cryptocurrency,学术开发
+  - GEOSITE,category-tech-media,学术开发
+  - GEOSITE,category-container,学术开发
+  - GEOSITE,category-dev,学术开发
+  - GEOSITE,google,学术开发
+  - GEOSITE,github,学术开发
+  - GEOIP,google,学术开发
 # - 3.4 云存储 (Cloud Storage)
-  - GEOSITE,pikpak,云存储
+  - GEOSITE,category-emby,云存储
   - GEOSITE,onedrive,云存储
   - GEOSITE,dropbox,云存储
+  - GEOSITE,pikpak,云存储
   - GEOSITE,mega,云存储
 # - 3.5 社交媒体 (Social Media)
   - GEOSITE,category-social-media-!cn,社交媒体
-  - GEOSITE,reddit,社交媒体
-  - GEOSITE,discord,社交媒体
   - GEOSITE,telegram,社交媒体
-  - GEOIP,twitter,社交媒体
+  - GEOSITE,discord,社交媒体
   - GEOIP,facebook,社交媒体
   - GEOIP,telegram,社交媒体
+  - GEOSITE,reddit,社交媒体
+  - GEOIP,twitter,社交媒体
 # - 3.6 游戏平台 (Game Platform)
   - GEOSITE,category-games,游戏平台
-# - 3.7 流媒体 (Streaming)
-  - GEOSITE,category-entertainment,流媒体
-  - GEOSITE,biliintl,流媒体
-  - GEOIP,netflix,流媒体
+# - 3.7 影音娱乐 (Entertainment)
+  - GEOSITE,category-entertainment,影音娱乐
+  - GEOSITE,category-acg,影音娱乐
+  - GEOSITE,biliintl,影音娱乐
+  - GEOIP,netflix,影音娱乐
 # - 3.8 NSFW (Adult Content)
-  - GEOSITE,pixiv,NSFW
   - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
+  - GEOSITE,pixiv,NSFW
 # - 4. 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他
   - GEOIP,!cn,其他,no-resolve
