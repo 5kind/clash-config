@@ -245,7 +245,7 @@ rules:
   - GEOSITE,adobe,阻断
   - RULE-SET,reject,阻断
 # 3. 代理分流 (Proxy Groups)
-# - 3.1 国内流量 (Domestic)
+# - 国内流量 (Domestic)
   # geosite
   - GEOSITE,category-game-platforms-download,游戏平台
   - GEOSITE,category-collaborate-cn,国内
@@ -265,10 +265,7 @@ rules:
   - GEOSITE,category-dev-cn,国内
   - GEOSITE,category-dev@cn,国内
   - GEOIP,CN,国内
-# - 3.2 人工智能 (AI)
-  - GEOSITE,category-ai-!cn,人工智能
-  - GEOSITE,microsoft,人工智能
-# - 3.3 学术开发 (Academic)
+# - 学术开发 (Academic)
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
   - GEOSITE,category-scholar-!cn,学术开发
@@ -280,13 +277,13 @@ rules:
   - GEOSITE,google,学术开发
   - GEOSITE,github,学术开发
   - GEOIP,google,学术开发
-# - 3.4 网络存储 (Cloud Storage)
+# - 网络存储 (Cloud Storage)
   - GEOSITE,category-emby,网络存储
   - GEOSITE,onedrive,网络存储
   - GEOSITE,dropbox,网络存储
   - GEOSITE,pikpak,网络存储
   - GEOSITE,mega,网络存储
-# - 3.5 社交媒体 (Social Media)
+# - 社交媒体 (Social Media)
   - GEOSITE,category-social-media-!cn,社交媒体
   - GEOSITE,telegram,社交媒体
   - GEOSITE,discord,社交媒体
@@ -294,18 +291,21 @@ rules:
   - GEOIP,facebook,社交媒体
   - GEOIP,telegram,社交媒体
   - GEOIP,twitter,社交媒体
-# - 3.6 游戏平台 (Game Platform)
+# - 游戏平台 (Game Platform)
   - GEOSITE,category-games,游戏平台
-# - 3.7 影音娱乐 (Entertainment)
+# - 影音娱乐 (Entertainment)
   - GEOSITE,category-entertainment,影音娱乐
   - GEOSITE,category-acg,影音娱乐
   - GEOSITE,biliintl,影音娱乐
   - GEOIP,netflix,影音娱乐
-# - 3.8 NSFW (Adult Content)
+# - NSFW (Adult Content)
   - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
   - GEOSITE,pixiv,NSFW
-# - 4. 其他流量 (Other)
+# - 人工智能 (AI)
+  - GEOSITE,category-ai-!cn,人工智能
+  - GEOSITE,microsoft,人工智能
+# - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他
   - GEOIP,!cn,其他,no-resolve
   - MATCH,其他
