@@ -245,12 +245,16 @@ rules:
   - GEOSITE,adobe,阻断
   - RULE-SET,reject,阻断
 # 3. 代理分流 (Proxy Groups)
+# - 提前分配：
+# - 人工智能 (AI) - 1
+  - GEOSITE,category-ai-!cn,人工智能
 # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,category-game-platforms-download,游戏平台
   - GEOSITE,category-collaborate-cn,国内
   - GEOSITE,category-companies@cn,国内
   - GEOSITE,cloudflare@cn,国内
+  - GEOSITE,google@cn,国内
   - GEOSITE,apple@cn,国内
   - GEOSITE,bing@cn,国内
   - GEOSITE,CN,国内
@@ -301,8 +305,7 @@ rules:
   - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
   - GEOSITE,pixiv,NSFW
-# - 人工智能 (AI)
-  - GEOSITE,category-ai-!cn,人工智能
+# - 人工智能 (AI) - 2
   - GEOSITE,microsoft,人工智能
 # - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他
