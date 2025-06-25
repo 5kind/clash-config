@@ -239,6 +239,9 @@ rules:
   - DOMAIN-SUFFIX,live.cn,直连
   - DOMAIN-KEYWORD,aria2,直连
   - DOMAIN-SUFFIX,smtp,直连
+# 操你妈的谷歌，来源：https://zhuanlan.zhihu.com/p/1896145165221070157
+  - DOMAIN-SUFFIX,gcp,人工智能
+  - DOMAIN-SUFFIX,doubleclick,人工智能
 # 2. 广告与跟踪器阻断 (Block)
   - GEOSITE,category-ads-all,阻断
   - GEOSITE,win-spy,阻断
