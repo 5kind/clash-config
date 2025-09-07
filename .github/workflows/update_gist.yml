@@ -85,7 +85,7 @@ jobs:
         if: steps.cache_mihomo.outputs.cache-hit != 'true'
         run: |
           echo "Cache miss. Downloading new version..."
-          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64") and endswith(".deb")) | .browser_download_url')
+          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64") and endswith(".deb") and ( .name | test("-v[0-9]") | not)) | .browser_download_url')
           if [ -z "$DEB_URL" ]; then
             echo "::error::Could not find the download URL for the mihomo .deb package."
             exit 1
