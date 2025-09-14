@@ -135,6 +135,7 @@ dns:
     - '*.finalfantasyxiv.com'
     - '*.ffxiv.com'
     - '*.mcdn.bilivideo.cn'
+    - 'public.easytier.cn'
     - WORKGROUP
   # dns 服务监听
   listen: 0.0.0.0:1053
