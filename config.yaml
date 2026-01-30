@@ -194,7 +194,7 @@ proxies:
 - name: "直连"
   type: direct
   udp: true
-proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工智能, 社交媒体, 游戏平台, 影音娱乐, 网络存储, NSFW, 国内, 阻断, 其他
+proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工智能, 社交媒体, 游戏平台, 影音娱乐, 网络存储, NSFW, 国内流量, 广告阻断, 其他流量
 - {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术开发, <<: *default-proxies,
@@ -213,14 +213,14 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
 - {name: NSFW, <<: *consistent-hashing,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
-- {name: 国内, <<: *priority-direct,
+- {name: 国内流量, <<: *priority-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
-- {name: 阻断, <<: *priority-reject,
+- {name: 广告阻断, <<: *priority-reject,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
-- {name: 其他, <<: *default-proxies,
+- {name: 其他流量, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
   # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
-- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网",  
+- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
@@ -230,7 +230,7 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
 - {name: ChatGPT, type: fallback, include-all: true, interval: 300, filter: "(?i)(ChatGPT)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|客服|发布|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直连)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
@@ -252,10 +252,10 @@ rules:
   - DOMAIN-KEYWORD,aria2,直连
   - DOMAIN-SUFFIX,smtp,直连
 # 2. 广告与跟踪器阻断 (Block)
-  - GEOSITE,category-ads-all,阻断
-  - GEOSITE,win-spy,阻断
-  - GEOSITE,adobe,阻断
-  - RULE-SET,reject,阻断
+  - GEOSITE,category-ads-all,广告阻断
+  - GEOSITE,win-spy,广告阻断
+  - GEOSITE,adobe,广告阻断
+  - RULE-SET,reject,广告阻断
 # 3. 代理分流 (Proxy Groups)
 # - 提前分配：
 # - 人工智能 (AI) - 1
@@ -263,23 +263,23 @@ rules:
 # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,category-game-platforms-download,游戏平台
-  - GEOSITE,category-collaborate-cn,国内
-  - GEOSITE,category-companies@cn,国内
-  - GEOSITE,cloudflare@cn,国内
-  - GEOSITE,google@cn,国内
-  - GEOSITE,apple@cn,国内
-  - GEOSITE,bing@cn,国内
-  - GEOSITE,CN,国内
+  - GEOSITE,category-collaborate-cn,国内流量
+  - GEOSITE,category-companies@cn,国内流量
+  - GEOSITE,cloudflare@cn,国内流量
+  - GEOSITE,google@cn,国内流量
+  - GEOSITE,apple@cn,国内流量
+  - GEOSITE,bing@cn,国内流量
+  - GEOSITE,CN,国内流量
   # category
-  - GEOSITE,category-game-accelerator-cn,国内
-  - GEOSITE,category-ecommerce@cn,国内
-  - GEOSITE,category-documents-cn,国内
-  - GEOSITE,category-scholar-cn,国内
-  - GEOSITE,category-media-cn,国内
-  - GEOSITE,category-bank-cn,国内
-  - GEOSITE,category-dev-cn,国内
-  - GEOSITE,category-dev@cn,国内
-  - GEOIP,CN,国内
+  - GEOSITE,category-game-accelerator-cn,国内流量
+  - GEOSITE,category-ecommerce@cn,国内流量
+  - GEOSITE,category-documents-cn,国内流量
+  - GEOSITE,category-scholar-cn,国内流量
+  - GEOSITE,category-media-cn,国内流量
+  - GEOSITE,category-bank-cn,国内流量
+  - GEOSITE,category-dev-cn,国内流量
+  - GEOSITE,category-dev@cn,国内流量
+  - GEOIP,CN,国内流量
 # - 学术开发 (Academic)
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
@@ -320,9 +320,9 @@ rules:
 # - 人工智能 (AI) - 2
   - GEOSITE,microsoft,人工智能
 # - 其他流量 (Other)
-  - GEOSITE,geolocation-!cn,其他
-  - GEOIP,!cn,其他,no-resolve
-  - MATCH,其他
+  - GEOSITE,geolocation-!cn,其他流量
+  - GEOIP,!cn,其他流量,no-resolve
+  - MATCH,其他流量
 
 geox-url:
   geoip: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
