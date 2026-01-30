@@ -1,3 +1,4 @@
+*.bak
 secret
 config.diff
 final_config.yaml
