@@ -1,11 +1,11 @@
 ######### 锚点 start #######
 # 策略组相关
-default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-unlock-ai: &unlock-ai {type: select, proxies: [ChatGPT, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
-priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+unlock-ai: &unlock-ai {type: select, proxies: [AI专线, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
+consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
+priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
 health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -195,7 +195,7 @@ proxies:
   type: direct
   udp: true
 proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工智能, 社交媒体, 游戏平台, 影音娱乐, 网络存储, NSFW, 国内流量, 广告阻断, 其他流量
-- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
+- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术开发, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
@@ -219,7 +219,7 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
 - {name: 其他流量, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  # 地区分组：倍率专线, 亚太快速, 欧美优选, ChatGPT, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+  # 地区分组：倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
@@ -228,9 +228,9 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
 - {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
-- {name: ChatGPT, type: fallback, include-all: true, interval: 300, filter: "(?i)(ChatGPT)",
+- {name: AI专线, type: select, include-all: true, interval: 300, filter: "(?i)(ChatGPT|Sora)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|客服|发布|网址|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|客服|发布|网址|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直连)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
