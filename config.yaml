@@ -1,11 +1,11 @@
 ######### 锚点 start #######
 # 策略组相关
-default-proxies: &default-proxies {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-priority-direct: &priority-direct {type: select, proxies: [直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-unlock-ai: &unlock-ai {type: select, proxies: [AI专线, 默认选择, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直连]}
-consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直连]}
-priority-reject: &priority-reject {type: select, proxies: [REJECT, 直连, 默认选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+default-proxies: &default-proxies {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+priority-direct: &priority-direct {type: select, proxies: [直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+unlock-ai: &unlock-ai {type: select, proxies: [AI专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
+priority-reject: &priority-reject {type: select, proxies: [REJECT, 直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
 health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -191,11 +191,11 @@ dns:
       - '+.googlevideo.com'
 
 proxies:
-- name: "直连"
+- name: "直接连接"
   type: direct
   udp: true
-proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工智能, 社交媒体, 游戏平台, 影音娱乐, 网络存储, NSFW, 国内流量, 广告阻断, 其他流量
-- {name: 默认选择, type: select, proxies: [自动选择, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直连],
+proxy-groups:
+- {name: 默认选择, type: select, proxies: [自动选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术开发, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Google_Search.png"}
@@ -219,9 +219,11 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Blackhole.png"}
 - {name: 其他流量, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  # 地区分组：倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+  # 地区分组：原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
+- {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由)",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Airport.png"}
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
 - {name: 亚太快速, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)(港|hk|hongkong|hong kong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|越南|vn|vietnam)",
@@ -230,27 +232,27 @@ proxy-groups: # 规则分流：默认选择, 学术开发, 网上服务, 人工�
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
 - {name: AI专线, type: select, include-all: true, interval: 300, filter: "(?i)(ChatGPT|Sora)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连|剩余|套餐|通知|官网|客服|发布|网址|专|專|[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直连)).*",
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直连)).*",
+- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直接连接)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
-- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直连)).*",
+- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直接连接)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
-- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直连)).*",
+- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
-# 1. 直连 (Bypass LAN and Private)
-  - GEOSITE,category-public-tracker,直连,no-resolve
-  - GEOSITE,category-pt,直连,no-resolve
-  - GEOSITE,private,直连,no-resolve
-  - GEOIP,private,直连,no-resolve
-  - GEOIP,lan,直连,no-resolve
-  - DOMAIN-SUFFIX,live.cn,直连
-  - DOMAIN-KEYWORD,aria2,直连
-  - DOMAIN-SUFFIX,smtp,直连
+# 1. 直接连接 (Bypass LAN and Private)
+  - GEOSITE,category-public-tracker,直接连接,no-resolve
+  - GEOSITE,category-pt,直接连接,no-resolve
+  - GEOSITE,private,直接连接,no-resolve
+  - GEOIP,private,直接连接,no-resolve
+  - GEOIP,lan,直接连接,no-resolve
+  - DOMAIN-SUFFIX,live.cn,直接连接
+  - DOMAIN-KEYWORD,aria2,直接连接
+  - DOMAIN-SUFFIX,smtp,直接连接
 # 2. 广告与跟踪器阻断 (Block)
   - GEOSITE,category-ads-all,广告阻断
   - GEOSITE,win-spy,广告阻断
