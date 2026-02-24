@@ -264,6 +264,7 @@ rules:
   - GEOSITE,category-ai-!cn,人工智能
 # - 国内流量 (Domestic)
   # geosite
+  - GEOSITE,category-game-platforms-download@cn,国内流量
   - GEOSITE,category-game-platforms-download,游戏平台
   - GEOSITE,category-collaborate-cn,国内流量
   - GEOSITE,category-companies@cn,国内流量
