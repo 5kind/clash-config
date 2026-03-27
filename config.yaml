@@ -205,7 +205,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
 - {name: 社交媒体, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
-- {name: 游戏平台, <<: *default-proxies,
+- {name: 游戏加速, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
 - {name: 网络存储, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
@@ -264,22 +264,24 @@ rules:
   - GEOSITE,category-ai-!cn,人工智能
 # - 国内流量 (Domestic)
   # geosite
-  - GEOSITE,category-game-platforms-download@cn,国内流量
-  - GEOSITE,category-game-platforms-download,游戏平台
-  - GEOSITE,category-collaborate-cn,国内流量
-  - GEOSITE,category-companies@cn,国内流量
   - GEOSITE,cloudflare@cn,国内流量
   - GEOSITE,google@cn,国内流量
   - GEOSITE,apple@cn,国内流量
   - GEOSITE,bing@cn,国内流量
   - GEOSITE,CN,国内流量
   # category
+  - GEOSITE,category-game-platforms-download,国内流量
   - GEOSITE,category-game-accelerator-cn,国内流量
+  - GEOSITE,category-collaborate-cn,国内流量
+  - GEOSITE,category-companies@cn,国内流量
   - GEOSITE,category-ecommerce@cn,国内流量
   - GEOSITE,category-documents-cn,国内流量
   - GEOSITE,category-scholar-cn,国内流量
   - GEOSITE,category-media-cn,国内流量
+  - GEOSITE,category-games@cn,国内流量
+  - GEOSITE,category-games-cn,国内流量
   - GEOSITE,category-bank-cn,国内流量
+  - GEOSITE,category-cdn-cn,国内流量
   - GEOSITE,category-dev-cn,国内流量
   - GEOSITE,category-dev@cn,国内流量
   - GEOIP,CN,国内流量
@@ -290,11 +292,8 @@ rules:
   - GEOSITE,category-cryptocurrency,学术开发
   - GEOSITE,category-anticensorship,学术开发
   - GEOSITE,category-tech-media,学术开发
-  - GEOSITE,category-container,学术开发
   - GEOSITE,category-dev,学术开发
-  - GEOSITE,google,学术开发
   - GEOSITE,github,学术开发
-  - GEOIP,google,学术开发
 # - 网络存储 (Cloud Storage)
   - GEOSITE,category-emby,网络存储
   - GEOSITE,onedrive,网络存储
@@ -309,10 +308,10 @@ rules:
   - GEOIP,facebook,社交媒体
   - GEOIP,telegram,社交媒体
   - GEOIP,twitter,社交媒体
-# - 游戏平台 (Game Platform)
-  - GEOSITE,category-games,游戏平台
+# - 游戏加速 (Game Acceleration)
+  - GEOSITE,category-games-!cn,游戏加速
 # - 影音娱乐 (Entertainment)
-  - GEOSITE,category-entertainment,影音娱乐
+  - GEOSITE,category-entertainment@!cn,影音娱乐
   - GEOSITE,category-acg,影音娱乐
   - GEOSITE,biliintl,影音娱乐
   - GEOIP,netflix,影音娱乐
@@ -322,6 +321,8 @@ rules:
   - GEOSITE,pixiv,NSFW
 # - 人工智能 (AI) - 2
   - GEOSITE,microsoft,人工智能
+  - GEOSITE,google,人工智能
+  - GEOIP,google,人工智能
 # - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他流量
   - GEOIP,!cn,其他流量,no-resolve
