@@ -265,7 +265,7 @@ rules:
 # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,cloudflare@cn,国内流量
-  - GEOSITE,google@cn,国内流量
+  # - GEOSITE,google@cn,国内流量
   - GEOSITE,apple@cn,国内流量
   - GEOSITE,bing@cn,国内流量
   - GEOSITE,CN,国内流量
