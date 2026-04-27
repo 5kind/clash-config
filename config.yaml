@@ -260,15 +260,10 @@ rules:
   - RULE-SET,reject,广告阻断
 # 3. 代理分流 (Proxy Groups)
 # - 提前分配：
-# - 人工智能 (AI)
-  - GEOSITE,category-ai-!cn,人工智能
-  - GEOSITE,microsoft,人工智能
-  - GEOSITE,google,人工智能
-  - GEOIP,google,人工智能
 # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,cloudflare@cn,国内流量
-  # - GEOSITE,google@cn,国内流量
+  - GEOSITE,microsoft@cn,国内流量
   - GEOSITE,apple@cn,国内流量
   - GEOSITE,bing@cn,国内流量
   - GEOSITE,CN,国内流量
@@ -288,6 +283,11 @@ rules:
   - GEOSITE,category-dev-cn,国内流量
   - GEOSITE,category-dev@cn,国内流量
   - GEOIP,CN,国内流量
+# - 人工智能 (AI)
+  - GEOSITE,category-ai-!cn,人工智能
+  - GEOSITE,microsoft,人工智能
+  - GEOSITE,google,人工智能
+  - GEOIP,google,人工智能
 # - 学术开发 (Academic)
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
