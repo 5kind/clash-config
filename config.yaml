@@ -230,7 +230,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
 - {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
-- {name: AI专线, type: select, include-all: true, interval: 300, filter: "(?i)(ChatGPT|Sora)",
+- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: "(?i)(ChatGPT|Sora)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
 - {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
