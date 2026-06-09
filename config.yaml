@@ -1,11 +1,12 @@
 ######### 锚点 start #######
 # 策略组相关
-default-proxies: &default-proxies {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-priority-direct: &priority-direct {type: select, proxies: [直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+default-proxies: &default-proxies {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+priority-direct: &priority-direct {type: select, proxies: [直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 unlock-ai: &unlock-ai {type: select, proxies: [AI专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
-priority-reject: &priority-reject {type: select, proxies: [REJECT, 直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+high-flow: &high-flow {type: select, proxies: [下载专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
+priority-reject: &priority-reject {type: select, proxies: [REJECT, 直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 #这里是订阅更新和延迟测试相关的
 health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 ######### 锚点 end #######
@@ -195,7 +196,7 @@ proxies:
   type: direct
   udp: true
 proxy-groups:
-- {name: 默认选择, type: select, proxies: [自动选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接],
+- {name: 默认选择, type: select, proxies: [自动选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接],
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
 - {name: 学术开发, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Lab.png"}
@@ -207,7 +208,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
 - {name: 游戏加速, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
-- {name: 网络存储, <<: *default-proxies,
+- {name: 云盘下载, <<: *high-flow,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
 - {name: 影音娱乐, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
@@ -219,7 +220,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/AdBlack.png"}
 - {name: 其他流量, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  # 地区分组：原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+  # 地区分组：原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由)",
@@ -232,6 +233,8 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
 - {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(ChatGPT|Sora|\[(三网|Any|Hy2)\].*(SG|US|TW|HK))',
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
+- {name: 下载专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)',
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
 - {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接)).*",
@@ -283,8 +286,10 @@ rules:
   - GEOSITE,category-dev-cn,国内流量
   - GEOSITE,category-dev@cn,国内流量
   - GEOIP,CN,国内流量
+  # 大流量 (High Flow)
+  - GEOSITE,category-cdn-\!cn,云盘下载
 # - 人工智能 (AI)
-  - GEOSITE,category-ai-!cn,人工智能
+  - GEOSITE,category-ai-chat-!cn,人工智能
   - GEOSITE,microsoft,人工智能
   - GEOSITE,google,人工智能
   - GEOIP,google,人工智能
@@ -296,13 +301,13 @@ rules:
   - GEOSITE,category-anticensorship,学术开发
   - GEOSITE,category-tech-media,学术开发
   - GEOSITE,category-dev,学术开发
-  - GEOSITE,github,学术开发
-# - 网络存储 (Cloud Storage)
-  - GEOSITE,category-emby,网络存储
-  - GEOSITE,onedrive,网络存储
-  - GEOSITE,dropbox,网络存储
-  - GEOSITE,pikpak,网络存储
-  - GEOSITE,mega,网络存储
+# - 云盘下载 (Cloud Storage)
+  - GEOSITE,category-ai-!cn,云盘下载
+  - GEOSITE,category-emby,云盘下载
+  - GEOSITE,onedrive,云盘下载
+  - GEOSITE,dropbox,云盘下载
+  - GEOSITE,pikpak,云盘下载
+  - GEOSITE,mega,云盘下载
 # - 社交媒体 (Social Media)
   - GEOSITE,category-social-media-!cn,社交媒体
   - GEOSITE,telegram,社交媒体
