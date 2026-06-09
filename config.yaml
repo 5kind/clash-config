@@ -287,7 +287,7 @@ rules:
   - GEOSITE,category-dev@cn,国内流量
   - GEOIP,CN,国内流量
   # 大流量 (High Flow)
-  - GEOSITE,category-cdn-\!cn,云盘下载
+  - GEOSITE,category-cdn-!cn,云盘下载
 # - 人工智能 (AI)
   - GEOSITE,category-ai-chat-!cn,人工智能
   - GEOSITE,microsoft,人工智能
