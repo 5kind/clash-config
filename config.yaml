@@ -221,7 +221,7 @@ proxy-groups:
 - {name: 其他流量, <<: *default-proxies,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
   # 地区分组：原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
-- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址",  
+- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址|支持",  
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Airport.png", proxies: [故障转移]}
@@ -237,13 +237,13 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
 - {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png", proxies: [故障转移]}
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接|应急)).*",
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直接连接)).*",
+- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
-- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直接连接|应急)).*",
+- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
-- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接)).*",
+- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
