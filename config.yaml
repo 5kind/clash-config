@@ -268,29 +268,6 @@ rules:
   - GEOSITE,microsoft,人工智能
   - GEOSITE,google,人工智能
   - GEOIP,google,人工智能
-# - 国内流量 (Domestic)
-  # geosite
-  - GEOSITE,cloudflare@cn,国内流量
-  - GEOSITE,microsoft@cn,国内流量
-  - GEOSITE,apple@cn,国内流量
-  - GEOSITE,bing@cn,国内流量
-  - GEOSITE,CN,国内流量
-  # category
-  - GEOSITE,category-game-platforms-download,国内流量
-  - GEOSITE,category-game-accelerator-cn,国内流量
-  - GEOSITE,category-collaborate-cn,国内流量
-  - GEOSITE,category-companies@cn,国内流量
-  - GEOSITE,category-ecommerce@cn,国内流量
-  - GEOSITE,category-documents-cn,国内流量
-  - GEOSITE,category-scholar-cn,国内流量
-  - GEOSITE,category-media-cn,国内流量
-  - GEOSITE,category-games@cn,国内流量
-  - GEOSITE,category-games-cn,国内流量
-  - GEOSITE,category-bank-cn,国内流量
-  - GEOSITE,category-cdn-cn,国内流量
-  - GEOSITE,category-dev-cn,国内流量
-  - GEOSITE,category-dev@cn,国内流量
-  - GEOIP,CN,国内流量
   # 大流量 (High Flow)
   - GEOSITE,category-cdn-!cn,云盘下载
 # - 学术开发 (Academic)
@@ -327,6 +304,30 @@ rules:
   - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
   - GEOSITE,pixiv,NSFW
+# 4. 兜底分流 (Fallback Groups)
+# - 国内流量 (Domestic)
+  # geosite
+  - GEOSITE,cloudflare@cn,国内流量
+  - GEOSITE,microsoft@cn,国内流量
+  - GEOSITE,apple@cn,国内流量
+  - GEOSITE,bing@cn,国内流量
+  - GEOSITE,CN,国内流量
+  # category
+  - GEOSITE,category-game-platforms-download,国内流量
+  - GEOSITE,category-game-accelerator-cn,国内流量
+  - GEOSITE,category-collaborate-cn,国内流量
+  - GEOSITE,category-companies@cn,国内流量
+  - GEOSITE,category-ecommerce@cn,国内流量
+  - GEOSITE,category-documents-cn,国内流量
+  - GEOSITE,category-scholar-cn,国内流量
+  - GEOSITE,category-media-cn,国内流量
+  - GEOSITE,category-games@cn,国内流量
+  - GEOSITE,category-games-cn,国内流量
+  - GEOSITE,category-bank-cn,国内流量
+  - GEOSITE,category-cdn-cn,国内流量
+  - GEOSITE,category-dev-cn,国内流量
+  - GEOSITE,category-dev@cn,国内流量
+  - GEOIP,CN,国内流量
 # - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他流量
   - GEOIP,!cn,其他流量,no-resolve
