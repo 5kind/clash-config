@@ -263,6 +263,11 @@ rules:
   - RULE-SET,reject,广告阻断
 # 3. 代理分流 (Proxy Groups)
 # - 提前分配：
+# - 人工智能 (AI)
+  - GEOSITE,category-ai-chat-!cn,人工智能
+  - GEOSITE,microsoft,人工智能
+  - GEOSITE,google,人工智能
+  - GEOIP,google,人工智能
 # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,cloudflare@cn,国内流量
@@ -274,6 +279,7 @@ rules:
   - GEOSITE,category-game-platforms-download,国内流量
   - GEOSITE,category-game-accelerator-cn,国内流量
   - GEOSITE,category-collaborate-cn,国内流量
+  - GEOSITE,category-companies@cn,国内流量
   - GEOSITE,category-ecommerce@cn,国内流量
   - GEOSITE,category-documents-cn,国内流量
   - GEOSITE,category-scholar-cn,国内流量
@@ -287,11 +293,6 @@ rules:
   - GEOIP,CN,国内流量
   # 大流量 (High Flow)
   - GEOSITE,category-cdn-!cn,云盘下载
-# - 人工智能 (AI)
-  - GEOSITE,category-ai-chat-!cn,人工智能
-  - GEOSITE,microsoft,人工智能
-  - GEOSITE,google,人工智能
-  - GEOIP,google,人工智能
 # - 学术开发 (Academic)
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
