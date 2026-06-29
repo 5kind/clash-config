@@ -274,7 +274,6 @@ rules:
   - GEOSITE,category-game-platforms-download,国内流量
   - GEOSITE,category-game-accelerator-cn,国内流量
   - GEOSITE,category-collaborate-cn,国内流量
-  - GEOSITE,category-companies@cn,国内流量
   - GEOSITE,category-ecommerce@cn,国内流量
   - GEOSITE,category-documents-cn,国内流量
   - GEOSITE,category-scholar-cn,国内流量
