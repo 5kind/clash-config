@@ -262,7 +262,27 @@ rules:
   - GEOSITE,adobe,广告阻断
   - RULE-SET,reject,广告阻断
 # 3. 代理分流 (Proxy Groups)
-# - 提前分配：
+# - 国内流量 (Domestic)
+  # geosite
+  - GEOSITE,cloudflare@cn,国内流量
+  - GEOSITE,microsoft@cn,国内流量
+  - GEOSITE,apple@cn,国内流量
+  - GEOSITE,bing@cn,国内流量
+  # category
+  - GEOSITE,category-game-platforms-download,国内流量
+  - GEOSITE,category-game-accelerator-cn,国内流量
+  - GEOSITE,category-collaborate-cn,国内流量
+  - GEOSITE,category-companies@cn,国内流量
+  - GEOSITE,category-ecommerce@cn,国内流量
+  - GEOSITE,category-documents-cn,国内流量
+  - GEOSITE,category-scholar-cn,国内流量
+  - GEOSITE,category-media-cn,国内流量
+  - GEOSITE,category-games@cn,国内流量
+  - GEOSITE,category-games-cn,国内流量
+  - GEOSITE,category-bank-cn,国内流量
+  - GEOSITE,category-cdn-cn,国内流量
+  - GEOSITE,category-dev-cn,国内流量
+  - GEOSITE,category-dev@cn,国内流量
 # - 人工智能 (AI)
   - GEOSITE,category-ai-chat-!cn,人工智能
   - GEOSITE,microsoft,人工智能
@@ -304,29 +324,8 @@ rules:
   - GEOSITE,category-porn,NSFW
   - GEOSITE,ehentai,NSFW
   - GEOSITE,pixiv,NSFW
-# 4. 兜底分流 (Fallback Groups)
-# - 国内流量 (Domestic)
-  # geosite
-  - GEOSITE,cloudflare@cn,国内流量
-  - GEOSITE,microsoft@cn,国内流量
-  - GEOSITE,apple@cn,国内流量
-  - GEOSITE,bing@cn,国内流量
+  # 4. 兜底分流 (Fallback Groups)
   - GEOSITE,CN,国内流量
-  # category
-  - GEOSITE,category-game-platforms-download,国内流量
-  - GEOSITE,category-game-accelerator-cn,国内流量
-  - GEOSITE,category-collaborate-cn,国内流量
-  - GEOSITE,category-companies@cn,国内流量
-  - GEOSITE,category-ecommerce@cn,国内流量
-  - GEOSITE,category-documents-cn,国内流量
-  - GEOSITE,category-scholar-cn,国内流量
-  - GEOSITE,category-media-cn,国内流量
-  - GEOSITE,category-games@cn,国内流量
-  - GEOSITE,category-games-cn,国内流量
-  - GEOSITE,category-bank-cn,国内流量
-  - GEOSITE,category-cdn-cn,国内流量
-  - GEOSITE,category-dev-cn,国内流量
-  - GEOSITE,category-dev@cn,国内流量
   - GEOIP,CN,国内流量
 # - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他流量
