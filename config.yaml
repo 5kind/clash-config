@@ -315,6 +315,7 @@ rules:
   - GEOIP,twitter,社交媒体
 # - 游戏加速 (Game Acceleration)
   - GEOSITE,category-games-!cn,游戏加速
+  - PROCESS-NAME,TslGame.exe,游戏加速
 # - 影音娱乐 (Entertainment)
   - GEOSITE,category-entertainment@!cn,影音娱乐
   - GEOSITE,category-acg,影音娱乐
