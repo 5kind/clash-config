@@ -1,4 +1,6 @@
 *.bak
+*.rej
+*.orig
 secret
 config.diff
 final_config.yaml

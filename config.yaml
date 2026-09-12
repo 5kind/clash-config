@@ -231,7 +231,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
 - {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
-- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(ChatGPT|Sora|\[(三网|Any|Hy2)\].*(SG|US|TW|HK))',
+- {name: AI专线, type: fallback, use: [1.大米], interval: 300, filter: '(?i)(ChatGPT|Sora|SG|US|TW|HK)',
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
 - {name: 下载专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)',
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
