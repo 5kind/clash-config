@@ -225,7 +225,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Airport.png", proxies: [故障转移]}
-- {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|[xX]\\d+)",
+- {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|电信2x)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
 - {name: 亚太快速, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)(港|hk|hongkong|hong kong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|越南|vn|vietnam)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
@@ -235,7 +235,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
 - {name: 下载专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)',
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||[xX]\\d+|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|专|專||电信2x|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|ChatGPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png", proxies: [故障转移]}
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
