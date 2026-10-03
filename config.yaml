@@ -235,15 +235,16 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
 - {name: 下载专线, type: select, include-all: true, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)', exclude-filter: "支持", 
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|剩余|套餐|通知|官网|客服|发布|网址|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專||高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|高倍|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專||高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png", proxies: [故障转移]}
+# Note: 自动选择与负载均衡排除高倍节点，故障转移与手动连接不排除
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|高倍)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
 - {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
 - {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|高倍)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
-- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|高倍)).*",
+- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持)).*",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
