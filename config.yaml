@@ -1,23 +1,26 @@
 ######### 锚点 start #######
 # 策略组相关
-default-proxies: &default-proxies {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-priority-direct: &priority-direct {type: select, proxies: [直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-unlock-ai: &unlock-ai {type: select, proxies: [AI专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-high-flow: &high-flow {type: select, proxies: [下载专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-# unlock-streaming: &unlock-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-consistent-hashing: &consistent-hashing {type: select, proxies: [负载均衡, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
-priority-reject: &priority-reject {type: select, proxies: [REJECT, 直接连接, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-#这里是订阅更新和延迟测试相关的
-health-check-gstatic: &health-check-gstatic {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
+x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+#x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
+x-proxy-group-reject: &proxy-group-reject {type: select, proxies: [REJECT, 直接连接, 下载专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+# 订阅更新和延迟测试相关
+x-proxy-providers-common: &proxy-providers-common {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
+x-filter-provider-info: &filter-provider-info "(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|频道|无法|说明|使用|提示|特别|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)"
+x-filter-normal-magnification: &filter-normal-magnification "'(?i)^(?!.*(?:高倍)).*$'"
 ######### 锚点 end #######
 
 # url 里填写自己的订阅,名称不能重复
 proxy-providers:
   provider1:
-    <<: *health-check-gstatic
+    <<: *proxy-providers-common
     url: ""
   provider2:
-    <<: *health-check-gstatic
+    <<: *proxy-providers-common
     url: ""
 ipv6: true
 allow-lan: true
@@ -44,100 +47,12 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 28.0.0.1/8
   fake-ip-filter:
-    # 以下域名列表参考自 vernesong/OpenClash 项目，并由 Hackl0us 整理补充
-    - '*.lan'
-    - '*.localdomain'
-    - '*.example'
-    - '*.invalid'
-    - '*.localhost'
-    - '*.test'
-    - '*.local'
-    - '*.home.arpa'
-    - 'time.*.com'
-    - 'time.*.gov'
-    - 'time.*.edu.cn'
-    - 'time.*.apple.com'
-    - 'time1.*.com'
-    - 'time2.*.com'
-    - 'time3.*.com'
-    - 'time4.*.com'
-    - 'time5.*.com'
-    - 'time6.*.com'
-    - 'time7.*.com'
-    - 'ntp.*.com'
-    - 'ntp1.*.com'
-    - 'ntp2.*.com'
-    - 'ntp3.*.com'
-    - 'ntp4.*.com'
-    - 'ntp5.*.com'
-    - 'ntp6.*.com'
-    - 'ntp7.*.com'
-    - '*.time.edu.cn'
-    - '*.ntp.org.cn'
-    - '+.pool.ntp.org'
-    - 'time1.cloud.tencent.com'
-    - 'music.163.com'
-    - '*.music.163.com'
-    - '*.126.net'
-    - 'musicapi.taihe.com'
-    - 'music.taihe.com'
-    - 'songsearch.kugou.com'
-    - 'trackercdn.kugou.com'
-    - '*.kuwo.cn'
-    - 'api-jooxtt.sanook.com'
-    - 'api.joox.com'
-    - 'joox.com'
-    - 'y.qq.com'
-    - '*.y.qq.com'
-    - 'streamoc.music.tc.qq.com'
-    - 'mobileoc.music.tc.qq.com'
-    - 'isure.stream.qqmusic.qq.com'
-    - 'dl.stream.qqmusic.qq.com'
-    - 'aqqmusic.tc.qq.com'
-    - 'amobile.music.tc.qq.com'
-    - '*.xiami.com'
-    - '*.music.migu.cn'
-    - 'music.migu.cn'
-    - '*.msftconnecttest.com'
-    - '*.msftncsi.com'
-    - 'msftconnecttest.com'
-    - 'msftncsi.com'
-    - 'localhost.ptlogin2.qq.com'
-    - 'localhost.sec.qq.com'
-    - '+.srv.nintendo.net'
-    - '+.stun.playstation.net'
-    - 'xbox.*.microsoft.com'
-    - '*.*.xboxlive.com'
-    - '+.battlenet.com.cn'
-    - '+.wotgame.cn'
-    - '+.wggames.cn'
-    - '+.wowsgame.cn'
-    - '+.wargaming.net'
-    - 'proxy.golang.org'
-    - 'stun.*.*'
-    - 'stun.*.*.*'
-    - '+.stun.*.*'
-    - '+.stun.*.*.*'
-    - '+.stun.*.*.*.*'
-    - 'heartbeat.belkin.com'
-    - '*.linksys.com'
-    - '*.linksyssmartwifi.com'
-    - '*.router.asus.com'
-    - 'mesu.apple.com'
-    - 'swscan.apple.com'
-    - 'swquery.apple.com'
-    - 'swdownload.apple.com'
-    - 'swcdn.apple.com'
-    - 'swdist.apple.com'
-    - 'lens.l.google.com'
-    - 'stun.l.google.com'
-    - '+.nflxvideo.net'
-    - '*.square-enix.com'
-    - '*.finalfantasyxiv.com'
-    - '*.ffxiv.com'
-    - '*.mcdn.bilivideo.cn'
-    - 'public.easytier.cn'
-    - WORKGROUP
+    - "rule-set:fakeip-filter"
+    - "*.lan"
+    - "*.localdomain"
+    - "*.localhost"
+    - "*.home.arpa"
+    - "WORKGROUP"
   # dns 服务监听
   listen: 0.0.0.0:1053
   use-hosts: true
@@ -194,63 +109,60 @@ dns:
       - '+.githubusercontent.com'
       - '+.googlevideo.com'
 
-proxies:
-- name: "直接连接"
-  type: direct
-  udp: true
+proxies: [{name: "直接连接", type: direct, udp: true}]
 proxy-groups:
-- {name: 默认选择, type: select, proxies: [自动选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接],
+- {name: 默认选择, <<: *proxy-group-auto,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Proxy.png"}
-- {name: 学术开发, <<: *default-proxies,
+- {name: 学术开发, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Lab.png"}
-# - {name: 网上服务, <<: *default-proxies,
-#  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/PayPal.png"}
-- {name: 人工智能, <<: *unlock-ai,
+- {name: 人工智能, <<: *proxy-group-ai,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Bot.png"}
-- {name: 社交媒体, <<: *default-proxies,
+- {name: 社交媒体, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Twitter.png"}
-- {name: 游戏加速, <<: *default-proxies,
+- {name: 游戏加速, <<: *proxy-group-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
-- {name: 云盘下载, <<: *high-flow,
+- {name: 云盘下载, <<: *proxy-group-highflow,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 影音娱乐, <<: *default-proxies,
+- {name: 影音娱乐, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *consistent-hashing,
+- {name: NSFW, <<: *proxy-group-failback,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
-- {name: 国内流量, <<: *priority-direct,
+- {name: 国内流量, <<: *proxy-group-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
-- {name: 广告阻断, <<: *priority-reject,
+- {name: 广告阻断, <<: *proxy-group-reject,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/AdBlack.png"}
-- {name: 其他流量, <<: *default-proxies,
+- {name: 其他流量, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
   # 地区分组：原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
-- {name: 订阅信息, type: select, include-all: true, filter: "(?i)剩余|套餐|通知|官网|客服|发布|网址|支持",  
+- {name: 订阅信息, type: select, include-all: true, filter: *filter-provider-info,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽)",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Airport.png", proxies: [故障转移]}
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Airport.png"}
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|高倍)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
 - {name: 亚太快速, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)(港|hk|hongkong|hong kong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|越南|vn|vietnam)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
 - {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
-- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[大米\].*(SG|US|TW)|^\[OKZTWO\].*(GPT|Sora))',
+- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[主\].*(SG|US|TW)|^\[备\].*(GPT|Sora))',
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 下载专线, type: select, include-all: true, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)', exclude-filter: "支持", 
+- {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)', exclude-filter: *filter-provider-info, hidden: true,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程|高倍|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專||高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
- icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png", proxies: [故障转移]}
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程|高倍|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
+ icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png", proxies: [故障转移]} # 已完全分完，此处留作占位符
 # Note: 自动选择与负载均衡排除高倍节点，故障转移与手动连接不排除
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程|高倍)).*",
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: *filter-normal-magnification, exclude-filter: *filter-provider-info,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 故障转移, type: fallback, include-all: true, interval: 300, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程)).*",
+- {name: 故障转移, type: fallback, include-all: true, interval: 300, exclude-filter: *filter-provider-info, hidden: true,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
-- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程|高倍)).*",
+- {name: 负载均衡, type: load-balance, include-all: true, strategy: consistent-hashing, filter: *filter-normal-magnification, exclude-filter: *filter-provider-info, hidden: true,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
-- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|应急|剩余|套餐|通知|官网|客服|发布|网址|支持|客户端|教程)).*",
+- {name: 手动选择, type: select, include-all: true, exclude-filter: *filter-provider-info,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
+# 0. 提前分流
+  - GEOSITE,biliintl,影音娱乐
 # 1. 直接连接 (Bypass LAN and Private)
   - GEOSITE,category-public-tracker,直接连接,no-resolve
   - GEOSITE,category-pt,直接连接,no-resolve
@@ -264,7 +176,6 @@ rules:
   - GEOSITE,category-ads-all,广告阻断
   - GEOSITE,win-spy,广告阻断
   - GEOSITE,adobe,广告阻断
-  - RULE-SET,reject,广告阻断
 # 3. 代理分流 (Proxy Groups)
 # - 国内流量 (Domestic)
   # geosite
@@ -287,14 +198,7 @@ rules:
   - GEOSITE,category-cdn-cn,国内流量
   - GEOSITE,category-dev-cn,国内流量
   - GEOSITE,category-dev@cn,国内流量
-# - 人工智能 (AI)
-  - GEOSITE,category-ai-chat-!cn,人工智能
-  - GEOSITE,microsoft,人工智能
-  - GEOSITE,google,人工智能
-  - GEOIP,google,人工智能
-  # 大流量 (High Flow)
-  - GEOSITE,category-cdn-!cn,云盘下载
-# - 学术开发 (Academic)
+# - 学术开发 (Academic): Also Docker, github etc.
   - GEOSITE,category-android-app-download,学术开发
   - GEOSITE,category-password-management,学术开发
   - GEOSITE,category-scholar-!cn,学术开发
@@ -302,13 +206,23 @@ rules:
   - GEOSITE,category-anticensorship,学术开发
   - GEOSITE,category-tech-media,学术开发
   - GEOSITE,category-dev,学术开发
-# - 云盘下载 (Cloud Storage)
+# - 人工智能 (AI)
+  - GEOSITE,category-ai-chat-!cn,人工智能
+  - GEOSITE,microsoft,人工智能
+  - GEOSITE,google,人工智能
+  - GEOIP,google,人工智能
+# - 云盘下载 (Cloud Storage): Also cdn, big module download etc.
+  - GEOSITE,category-cdn-!cn,云盘下载
   - GEOSITE,category-ai-!cn,云盘下载
   - GEOSITE,category-emby,云盘下载
   - GEOSITE,onedrive,云盘下载
   - GEOSITE,dropbox,云盘下载
   - GEOSITE,pikpak,云盘下载
   - GEOSITE,mega,云盘下载
+# - NSFW (Adult Content)
+  - GEOSITE,category-porn,NSFW
+  - GEOSITE,ehentai,NSFW
+  - GEOSITE,pixiv,NSFW
 # - 社交媒体 (Social Media)
   - GEOSITE,category-social-media-!cn,社交媒体
   - GEOSITE,telegram,社交媒体
@@ -328,12 +242,7 @@ rules:
 # - 影音娱乐 (Entertainment)
   - GEOSITE,category-entertainment@!cn,影音娱乐
   - GEOSITE,category-acg,影音娱乐
-  - GEOSITE,biliintl,影音娱乐
   - GEOIP,netflix,影音娱乐
-# - NSFW (Adult Content)
-  - GEOSITE,category-porn,NSFW
-  - GEOSITE,ehentai,NSFW
-  - GEOSITE,pixiv,NSFW
   # 4. 兜底分流 (Fallback Groups)
   - GEOSITE,CN,国内流量
   - GEOIP,CN,国内流量
@@ -348,12 +257,15 @@ geox-url:
   mmdb: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb"
 
 rule-anchor:
-  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: text}
-  domain: &domain {type: http, interval: 86400, behavior: domain, format: text}
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
 rule-providers:
-  reject:
+  fakeip-filter:
     <<: *domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
-  direct:
-    <<: *domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/fakeip-filter.mrs"
+  # reject:
+  #   <<: *domain
+  #   url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+  # direct:
+  #   <<: *domain
+  #   url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
