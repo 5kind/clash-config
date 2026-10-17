@@ -38,8 +38,8 @@ jobs:
       - name: Apply patch to create final config
         run: |
           echo "Applying patch to config.yaml..."
-          # -o final_config.yaml 表示输出到新文件，不修改原始的 config.yaml (模板)
-          patch config.yaml patch/config.diff -o final_config.yaml
+          # -o temp_config.yaml 表示输出到新文件，不修改原始的 config.yaml (模板)
+          patch config.yaml patch/config.diff -o temp_config.yaml
 
           if [ $? -ne 0 ]; then
             echo "::error::Patching failed."
@@ -47,11 +47,11 @@ jobs:
           fi
 
           # 检查最终配置文件是否非空
-          if [ ! -s final_config.yaml ]; then
-            echo "::error::final_config.yaml is empty after patching."
+          if [ ! -s temp_config.yaml ]; then
+            echo "::error::temp_config.yaml is empty after patching."
             exit 1
           fi
-          echo "final_config.yaml created successfully."
+          echo "temp_config.yaml created successfully."
           
       - name: Get latest mihomo version tag
         id: get_version # 给这个步骤一个ID，方便后面引用它的输出
@@ -98,12 +98,12 @@ jobs:
           echo "Installing mihomo package..."
           sudo apt-get install /tmp/mihomo.deb
 
-      - name: Validate final_config.yaml
+      - name: Validate temp_config.yaml
         run: |
-          echo "Validating final_config.yaml..."
-          mihomo -t -d /tmp/mihomo -f final_config.yaml
+          echo "Validating temp_config.yaml..."
+          mihomo -t -d /tmp/mihomo -f temp_config.yaml
           if [ $? -ne 0 ]; then
-            echo "::error::Configuration check failed for final_config.yaml."
+            echo "::error::Configuration check failed for temp_config.yaml."
             exit 1
           fi
           ls /tmp/mihomo
@@ -127,6 +127,15 @@ jobs:
             echo "::error::GIST_FILENAME secret is not set."
             exit 1
           fi
+
+          {
+            echo "# =========================================="
+            echo "# 更新时间: $(TZ='Asia/Shanghai' date -d "@$(git log -1 --format="%ct")" +"%Y-%m-%d %H:%M:%S") (UTC+8)"
+            echo "# 提交信息: $(git log -1 --format="%s")"
+            echo "# =========================================="
+            echo "" # 空一行，保持美观
+            cat temp_config.yaml
+          } > final_config.yaml
 
           echo "Updating Gist: $GIST_ID with file: $GIST_FILENAME using content from local final_config.yaml"
           # 为了确保gh cli正确更新Gist中指定的文件名，我们将本地生成的final_config.yaml
