@@ -46,7 +46,8 @@ dns:
   enable: true
   ipv6: true
   enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - "rule-set:fakeip-filter"
     - "*.lan"
@@ -71,8 +72,9 @@ dns:
 
   # 当 fallback 参数被配置时, DNS 请求将同时发送至上方 nameserver 列表和下方 fallback 列表中配置的所有 DNS 服务器.
   # 当解析得到的 IP 地址的地理位置不是 CN 时，clash 将会选用 fallback 中 DNS 服务器的解析结果。
-  # fallback:
-  #   - https://dns.google/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
 
   # 如果使用 nameserver 列表中的服务器解析的 IP 地址在下方列表中的子网中，则它们被认为是无效的，
   # Clash 会选用 fallback 列表中配置 DNS 服务器解析得到的结果。
@@ -85,7 +87,8 @@ dns:
   #
   # 采取以上逻辑进行域名解析是为了对抗 DNS 投毒攻击。
   fallback-filter:
-    geoip: false
+    geoip: true
+    geoip-code: CN
     ipcidr:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -104,11 +107,14 @@ dns:
       - 240.0.0.0/4
       - 255.255.255.255/32
     domain:
-      - '+.google.com'
-      - '+.facebook.com'
-      - '+.youtube.com'
-      - '+.githubusercontent.com'
-      - '+.googlevideo.com'
+      - "+.google.com"
+      - "+.googleapis.com"
+      - "+.googleusercontent.com"
+      - "+.googlevideo.com"
+      - "+.youtube.com"
+      - "+.facebook.com"
+      - "+.github.com"
+      - "+.githubusercontent.com"
 
 proxies: [{name: "直接连接", type: direct, udp: true}]
 proxy-groups:
