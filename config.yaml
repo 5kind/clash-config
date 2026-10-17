@@ -4,6 +4,7 @@ x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下
 x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, 默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 #x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [默认选择, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, 原生加速, 倍率专线, 亚太快速, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
@@ -125,7 +126,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
 - {name: 影音娱乐, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *proxy-group-failback,
+- {name: NSFW, <<: *proxy-group-west,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
 - {name: 国内流量, <<: *proxy-group-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
