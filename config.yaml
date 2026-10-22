@@ -168,9 +168,14 @@ proxy-groups:
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
-# 0. 提前分流
+  # ==========================================
+  # 0. 提前分流 (高频特例与防误伤兜底)
+  # ==========================================
   - GEOSITE,biliintl,影音娱乐
-# 1. 直接连接 (Bypass LAN and Private)
+  - DOMAIN-SUFFIX,dl.google.com,云盘下载
+  # ==========================================
+  # 1. 直接连接 (Bypass LAN and Private)
+  # ==========================================
   - GEOSITE,category-public-tracker,直接连接,no-resolve
   - GEOSITE,category-pt,直接连接,no-resolve
   - GEOSITE,private,直接连接,no-resolve
@@ -179,12 +184,16 @@ rules:
   - DOMAIN-SUFFIX,live.cn,直接连接
   - DOMAIN-KEYWORD,aria2,直接连接
   - DOMAIN-SUFFIX,smtp,直接连接
-# 2. 广告与跟踪器阻断 (Block)
+  # ==========================================
+  # 2. 广告与跟踪器阻断 (Block)
+  # ==========================================
   - GEOSITE,category-ads-all,广告阻断
   - GEOSITE,win-spy,广告阻断
   - GEOSITE,adobe,广告阻断
-# 3. 代理分流 (Proxy Groups)
-# - 国内流量 (Domestic)
+  # ==========================================
+  # 3. 核心代理分流 (Proxy Groups)
+  # ==========================================
+  # - 国内流量 (Domestic)
   # geosite
   - GEOSITE,cloudflare@cn,国内流量
   - GEOSITE,microsoft@cn,国内流量
@@ -250,10 +259,11 @@ rules:
   - GEOSITE,category-entertainment@!cn,影音娱乐
   - GEOSITE,category-acg,影音娱乐
   - GEOIP,netflix,影音娱乐
-  # 4. 兜底分流 (Fallback Groups)
+  # ==========================================
+  # 4. 兜底与全球收尾 (Fallback & Catch-all)
+  # ==========================================
   - GEOSITE,CN,国内流量
   - GEOIP,CN,国内流量
-# - 其他流量 (Other)
   - GEOSITE,geolocation-!cn,其他流量
   - GEOIP,!cn,其他流量,no-resolve
   - MATCH,其他流量
