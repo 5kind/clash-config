@@ -1,128 +1,158 @@
+
 name: Update Clash Config Gist
 
 on:
   push:
     branches:
-      - main  # 或者你的主分支名称，如 master
-    paths: # 仅当模板或加密的diff变化时触发 (可选，但推荐)
+      - main
+    paths:
       - 'config.yaml'
-      - 'patch/config.diff.enc'
+      - 'patch/override.yaml'
+      - 'patch/providers.yaml'
+      - '.github/workflows/**'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build_and_update_gist:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read # Action 需要读取仓库中的文件
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Make scripts executable
+      - name: Install dependencies
         run: |
-          chmod +x scripts/decrypt
+          sudo apt-get update
+          sudo apt-get install -y git-crypt python3-yaml
 
-      - name: Decrypt config.diff
+      - name: Unlock encrypted files
         env:
-          # GIST_ID 将同时用作解密密码
-          DECRYPTION_PASSPHRASE: ${{ secrets.GIST_ID }}
+          GIST_ID: ${{ secrets.GIST_ID }}
         run: |
-          if [ -z "$DECRYPTION_PASSPHRASE" ]; then
-            echo "::error::GIST_ID (used as decryption passphrase) secret is not set."
-            exit 1
-          fi
-          # 调用解密脚本
-          ./scripts/decrypt "$DECRYPTION_PASSPHRASE"
-
-      - name: Apply patch to create final config
-        run: |
-          echo "Applying patch to config.yaml..."
-          # -o temp_config.yaml 表示输出到新文件，不修改原始的 config.yaml (模板)
-          patch config.yaml patch/config.diff -o temp_config.yaml
-
-          if [ $? -ne 0 ]; then
-            echo "::error::Patching failed."
-            exit 1
-          fi
-
-          # 检查最终配置文件是否非空
-          if [ ! -s temp_config.yaml ]; then
-            echo "::error::temp_config.yaml is empty after patching."
-            exit 1
-          fi
-          echo "temp_config.yaml created successfully."
-          
-      - name: Get latest mihomo version tag
-        id: get_version # 给这个步骤一个ID，方便后面引用它的输出
-        run: |
-          # 从API获取最新版本号，并将其设置为该步骤的输出变量
-          VERSION_TAG=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r .tag_name)
-          echo "Latest mihomo version is: $VERSION_TAG"
-          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
-
-      - name: Cache mihomo package
-        id: cache_mihomo # 给这个步骤一个ID
-        uses: actions/cache@v4
-        with:
-          # 缓存的路径，我们将把下载的 .deb 文件放在这里
-          path: /tmp/mihomo.deb
-          # 缓存的 key，由操作系统和 mihomo 版本号组成
-          # 当 mihomo 版本更新时，key 会变化，导致缓存失效，从而触发重新下载
-          key: ${{ runner.os }}-mihomo-${{ steps.get_version.outputs.VERSION_TAG }}
-          
-      - name: Cache mihomo working directory
-        id: cache_workdir
-        uses: actions/cache@v4
-        with:
-          # 定义一个目录用于存放 mihomo 的数据文件
-          path: /tmp/mihomo
-          # 使用年份和月份作为 key，实现按月更新 GeoIP 数据库
-          key: ${{ runner.os }}-mihomo-data-$(date -u +'%Y-%m')
-
-      - name: Download mihomo if not cached
-        # 仅当上一步 cache_mihomo 的输出 cache-hit 不为 'true' 时，才执行此步骤
-        if: steps.cache_mihomo.outputs.cache-hit != 'true'
-        run: |
-          echo "Cache miss. Downloading new version..."
-          DEB_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64-v3") and endswith(".deb")) | .browser_download_url')
-          if [ -z "$DEB_URL" ]; then
-            echo "::error::Could not find the download URL for the mihomo .deb package."
-            exit 1
-          fi
-          echo "Downloading from: $DEB_URL"
-          wget -q -O /tmp/mihomo.deb "$DEB_URL"
-          
-      - name: Install mihomo from cache or download
-        run: |
-          echo "Installing mihomo package..."
-          sudo apt-get install /tmp/mihomo.deb
-
-      - name: Validate temp_config.yaml
-        run: |
-          echo "Validating temp_config.yaml..."
-          mihomo -t -d /tmp/mihomo -f temp_config.yaml
-          if [ $? -ne 0 ]; then
-            echo "::error::Configuration check failed for temp_config.yaml."
-            exit 1
-          fi
-          ls /tmp/mihomo
-          echo "Configuration check passed."
-
-      - name: Update Gist
-        env:
-          GH_TOKEN: ${{ secrets.GIST_PAT }}         # 使用你配置的带 gist 权限的 PAT
-          GIST_ID: ${{ secrets.GIST_ID }}           # Gist 的 ID
-          GIST_FILENAME: ${{ secrets.GIST_FILENAME }} # Gist 中的目标文件名
-        run: |
-          if [ -z "$GH_TOKEN" ]; then
-            echo "::error::GIST_PAT (for Gist operation) secret is not set."
-            exit 1
-          fi
           if [ -z "$GIST_ID" ]; then
             echo "::error::GIST_ID secret is not set."
             exit 1
           fi
+
+          KEY_FILE="$(mktemp)"
+          trap 'rm -f "$KEY_FILE"' EXIT
+
+          python3 scripts/git-crypt-key "$KEY_FILE"
+          git-crypt unlock "$KEY_FILE"
+
+          echo "Encrypted files unlocked successfully."
+
+      - name: Merge configuration
+        run: |
+          python3 scripts/merge \
+            config.yaml \
+            patch/providers.yaml \
+            patch/override.yaml \
+            output.yaml
+
+          if [ ! -s output.yaml ]; then
+            echo "::error::output.yaml is missing or empty."
+            exit 1
+          fi
+
+          echo "output.yaml created successfully."
+
+      - name: Get latest mihomo version
+        id: get_version
+        run: |
+          VERSION_TAG="$(
+            curl -fsSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest |
+            jq -er '.tag_name'
+          )"
+
+          if [ -z "$VERSION_TAG" ]; then
+            echo "::error::Could not determine mihomo version."
+            exit 1
+          fi
+
+          echo "Latest mihomo version: $VERSION_TAG"
+          echo "VERSION_TAG=$VERSION_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Get cache month
+        id: cache_month
+        run: |
+          echo "MONTH=$(date -u +'%Y-%m')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache mihomo package
+        id: cache_mihomo
+        uses: actions/cache@v4
+        with:
+          path: /tmp/mihomo.deb
+          key: ${{ runner.os }}-mihomo-${{ steps.get_version.outputs.VERSION_TAG }}
+
+      - name: Cache mihomo working directory
+        id: cache_workdir
+        uses: actions/cache@v4
+        with:
+          path: /tmp/mihomo
+          key: ${{ runner.os }}-mihomo-data-${{ steps.cache_month.outputs.MONTH }}
+
+      - name: Download mihomo if not cached
+        if: steps.cache_mihomo.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss. Downloading mihomo..."
+
+          DEB_URL="$(
+            curl -fsSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest |
+            jq -r '
+              [
+                .assets[]
+                | select(.name | contains("linux-amd64-v3") and endswith(".deb"))
+              ]
+              | first
+              | .browser_download_url // empty
+            '
+          )"
+
+          if [ -z "$DEB_URL" ]; then
+            echo "::error::Could not find mihomo linux-amd64-v3 package."
+            exit 1
+          fi
+
+          wget -q -O /tmp/mihomo.deb "$DEB_URL"
+
+          if [ ! -s /tmp/mihomo.deb ]; then
+            echo "::error::Downloaded mihomo package is empty."
+            exit 1
+          fi
+
+      - name: Install mihomo
+        run: |
+          sudo apt-get install -y /tmp/mihomo.deb
+          mkdir -p /tmp/mihomo
+
+      - name: Validate configuration
+        run: |
+          echo "Validating output.yaml..."
+
+          mihomo -t -d /tmp/mihomo -f output.yaml
+
+          echo "Configuration check passed."
+
+      - name: Update Gist
+        env:
+          GH_TOKEN: ${{ secrets.GIST_PAT }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_FILENAME: ${{ secrets.GIST_FILENAME }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GIST_PAT secret is not set."
+            exit 1
+          fi
+
+          if [ -z "$GIST_ID" ]; then
+            echo "::error::GIST_ID secret is not set."
+            exit 1
+          fi
+
           if [ -z "$GIST_FILENAME" ]; then
             echo "::error::GIST_FILENAME secret is not set."
             exit 1
@@ -130,19 +160,17 @@ jobs:
 
           {
             echo "# =========================================="
-            echo "# 更新时间: $(TZ='Asia/Shanghai' date -d "@$(git log -1 --format="%ct")" +"%Y-%m-%d %H:%M:%S") (UTC+8)"
-            echo "# 提交信息: $(git log -1 --format="%s")"
+            echo "# 更新时间: $(TZ='Asia/Shanghai' date -d "@$(git log -1 --format='%ct')" '+%Y-%m-%d %H:%M:%S') (UTC+8)"
+            echo "# 提交信息: $(git log -1 --format='%s')"
             echo "# =========================================="
-            echo "" # 空一行，保持美观
-            cat temp_config.yaml
+            echo ""
+            cat output.yaml
           } > final_config.yaml
 
-          echo "Updating Gist: $GIST_ID with file: $GIST_FILENAME using content from local final_config.yaml"
-          # 为了确保gh cli正确更新Gist中指定的文件名，我们将本地生成的final_config.yaml
-          # 先重命名为Gist中期望的文件名。
           mv final_config.yaml "$GIST_FILENAME"
 
-          # 使用 GitHub CLI (gh) 更新 Gist
+          echo "Updating Gist: $GIST_ID"
+
           gh gist edit "$GIST_ID" "$GIST_FILENAME"
 
           echo "Gist updated successfully."

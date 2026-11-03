@@ -1,0 +1,2 @@
+/patch/override.yaml filter=git-crypt diff=git-crypt
+/patch/providers.yaml filter=git-crypt diff=git-crypt

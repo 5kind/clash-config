@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import argparse
+import sys
+from pathlib import Path
+
+import yaml
+from yaml.tokens import KeyToken, ScalarToken, ValueToken
+
+
+def find_top_level_entries(text):
+    """Find top-level YAML entries and their source ranges."""
+
+    tokens = list(yaml.scan(text))
+    entries = []
+
+    for i in range(len(tokens) - 2):
+        key, scalar, value = tokens[i:i + 3]
+
+        if (
+            isinstance(key, KeyToken)
+            and key.start_mark.column == 0
+            and isinstance(scalar, ScalarToken)
+            and scalar.start_mark.column == 0
+            and isinstance(value, ValueToken)
+        ):
+            entries.append({
+                "key": scalar.value,
+                "start": key.start_mark.index,
+                "value_start": value.end_mark.index,
+            })
+
+    for i, entry in enumerate(entries):
+        entry["end"] = (
+            entries[i + 1]["start"]
+            if i + 1 < len(entries)
+            else len(text)
+        )
+
+    return entries
+
+
+def find_entry(entries, key):
+    matches = [entry for entry in entries if entry["key"] == key]
+
+    if len(matches) != 1:
+        raise ValueError(
+            f"Expected exactly one top-level {key!r}, found {len(matches)}"
+        )
+
+    return matches[0]
+
+
+def replace_providers(template, providers):
+    """Replace proxy-providers while preserving original YAML text."""
+
+    template_entries = find_top_level_entries(template)
+    provider_entries = find_top_level_entries(providers)
+
+    target = find_entry(template_entries, "proxy-providers")
+    source = find_entry(provider_entries, "proxy-providers")
+
+    return (
+        template[:target["start"]]
+        + providers[source["start"]:source["end"]]
+        + template[target["end"]:]
+    )
+
+
+def merge(base, override):
+    """Recursively merge mappings, append lists, and override scalars."""
+
+    for key, value in override.items():
+        if (
+            key in base
+            and isinstance(base[key], dict)
+            and isinstance(value, dict)
+        ):
+            merge(base[key], value)
+
+        elif (
+            key in base
+            and isinstance(base[key], list)
+            and isinstance(value, list)
+        ):
+            base[key].extend(value)
+
+        else:
+            base[key] = value
+
+    return base
+
+
+def merge_override(template, override):
+    """Merge override and rewrite only affected top-level entries."""
+
+    base_data = yaml.safe_load(template) or {}
+    override_data = yaml.safe_load(override) or {}
+
+    if not isinstance(base_data, dict):
+        raise ValueError("Template must be a YAML mapping")
+
+    if not isinstance(override_data, dict):
+        raise ValueError("Override must be a YAML mapping")
+
+    merged_data = merge(base_data, override_data)
+    entries = find_top_level_entries(template)
+
+    replacements = []
+    additions = []
+
+    for key in override_data:
+        dumped = yaml.safe_dump(
+            {key: merged_data[key]},
+            allow_unicode=True,
+            sort_keys=False,
+            default_flow_style=False,
+        )
+
+        if key in [entry["key"] for entry in entries]:
+            entry = find_entry(entries, key)
+            replacements.append((
+                entry["start"],
+                entry["end"],
+                dumped,
+            ))
+        else:
+            additions.append(dumped)
+
+    # Apply replacements from right to left to preserve source offsets.
+    for start, end, replacement in sorted(
+        replacements, reverse=True
+    ):
+        template = (
+            template[:start]
+            + replacement
+            + template[end:]
+        )
+
+    if additions:
+        if template and not template.endswith("\n"):
+            template += "\n"
+
+        template += "\n".join(additions)
+
+    return template
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Merge Clash configuration files."
+    )
+
+    parser.add_argument(
+        "template", nargs="?", default="config.yaml"
+    )
+    parser.add_argument(
+        "providers", nargs="?", default="patch/providers.yaml"
+    )
+    parser.add_argument(
+        "override", nargs="?", default="patch/override.yaml"
+    )
+    parser.add_argument(
+        "output", nargs="?", default="output.yaml"
+    )
+
+    args = parser.parse_args()
+
+    try:
+        template = Path(args.template).read_text(encoding="utf-8")
+        providers = Path(args.providers).read_text(encoding="utf-8")
+        override = Path(args.override).read_text(encoding="utf-8")
+
+        print(f"Template: {args.template}")
+        result = replace_providers(template, providers)
+        print(f"Providers: {args.providers}")
+        result = merge_override(result, override)
+        print(f"Override: {args.override}")
+
+        # Validate the final YAML.
+        yaml.safe_load(result)
+
+        Path(args.output).write_text(
+            result, encoding="utf-8"
+        )
+
+        print(f"Generated: {args.output}")
+
+    except (OSError, yaml.YAMLError, ValueError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

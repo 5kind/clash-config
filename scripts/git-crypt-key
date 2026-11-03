@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""Generate a deterministic git-crypt key from the GIST_ID environment variable."""
+
+import argparse
+import hashlib
+import hmac
+import os
+import struct
+import sys
+import tempfile
+
+
+# Keep these constants unchanged after the key has been deployed.
+KDF_SALT = b"5kind/clash-config"
+KDF_INFO = b"git-crypt/default-key/v1"
+
+GIT_CRYPT_FORMAT_VERSION = 2
+GIT_CRYPT_KEY_VERSION = 0
+
+AES_KEY_LENGTH = 32
+HMAC_KEY_LENGTH = 64
+
+
+def hkdf_sha256(ikm, salt, info, length):
+    """Derive key material using HKDF-SHA256."""
+    prk = hmac.new(salt, ikm, hashlib.sha256).digest()
+
+    output = bytearray()
+    block = b""
+    counter = 1
+
+    while len(output) < length:
+        block = hmac.new(
+            prk,
+            block + info + bytes((counter,)),
+            hashlib.sha256,
+        ).digest()
+
+        output.extend(block)
+        counter += 1
+
+    return bytes(output[:length])
+
+
+def pack_u32(value):
+    """Pack an unsigned 32-bit integer in big-endian byte order."""
+    return struct.pack(">I", value)
+
+
+def make_git_crypt_key(key_material):
+    """Serialize key material using the git-crypt key file format."""
+    expected_length = AES_KEY_LENGTH + HMAC_KEY_LENGTH
+
+    if len(key_material) != expected_length:
+        raise ValueError("Invalid key material length")
+
+    aes_key = key_material[:AES_KEY_LENGTH]
+    hmac_key = key_material[AES_KEY_LENGTH:]
+
+    result = bytearray()
+
+    # File preamble and format version.
+    result.extend(b"\0GITCRYPTKEY")
+    result.extend(pack_u32(GIT_CRYPT_FORMAT_VERSION))
+
+    # Header terminator (field ID 0).
+    result.extend(pack_u32(0))
+
+    # Key version (field ID 1, length 4).
+    result.extend(pack_u32(1))
+    result.extend(pack_u32(4))
+    result.extend(pack_u32(GIT_CRYPT_KEY_VERSION))
+
+    # AES key (field ID 3).
+    result.extend(pack_u32(3))
+    result.extend(pack_u32(AES_KEY_LENGTH))
+    result.extend(aes_key)
+
+    # HMAC key (field ID 5).
+    result.extend(pack_u32(5))
+    result.extend(pack_u32(HMAC_KEY_LENGTH))
+    result.extend(hmac_key)
+
+    # Entry terminator (field ID 0).
+    result.extend(pack_u32(0))
+
+    return bytes(result)
+
+
+def write_private_file(path, data):
+    """Atomically write a file with restrictive permissions."""
+    directory = os.path.dirname(os.path.abspath(path))
+    basename = os.path.basename(path)
+
+    fd, temporary_path = tempfile.mkstemp(
+        prefix="." + basename + ".",
+        suffix=".tmp",
+        dir=directory,
+    )
+
+    try:
+        if hasattr(os, "fchmod"):
+            os.fchmod(fd, 0o600)
+
+        with os.fdopen(fd, "wb") as output:
+            fd = -1
+            output.write(data)
+            output.flush()
+            os.fsync(output.fileno())
+
+        os.replace(temporary_path, path)
+
+        # Reapply permissions after replacement where supported.
+        try:
+            os.chmod(path, 0o600)
+        except OSError:
+            pass
+
+    except Exception:
+        if fd >= 0:
+            os.close(fd)
+
+        try:
+            os.unlink(temporary_path)
+        except OSError:
+            pass
+
+        raise
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate a deterministic git-crypt key from GIST_ID."
+    )
+    parser.add_argument(
+        "output",
+        help="Output path for the generated git-crypt key file",
+    )
+    args = parser.parse_args()
+
+    gist_id = os.environ.get("GIST_ID")
+
+    if not gist_id:
+        parser.error("GIST_ID environment variable is required")
+
+    if gist_id != gist_id.strip() or any(c.isspace() for c in gist_id):
+        parser.error("GIST_ID must not contain whitespace")
+
+    key_material = hkdf_sha256(
+        gist_id.encode("utf-8"),
+        KDF_SALT,
+        KDF_INFO,
+        AES_KEY_LENGTH + HMAC_KEY_LENGTH,
+    )
+
+    key_file = make_git_crypt_key(key_material)
+
+    try:
+        write_private_file(args.output, key_file)
+    except OSError as exc:
+        print(
+            "git-crypt-key: unable to write output file: {}".format(exc),
+            file=sys.stderr,
+        )
+        return 1
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

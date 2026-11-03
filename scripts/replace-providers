@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import argparse
+import sys
+from pathlib import Path
+
+import yaml
+from yaml.tokens import KeyToken, ScalarToken, ValueToken
+
+
+def find_top_level_value(text, key, filename):
+    """Return the source range of a top-level YAML key's value."""
+
+    tokens = list(yaml.scan(text))
+
+    matches = []
+
+    for i in range(len(tokens) - 2):
+        key_token, scalar_token, value_token = tokens[i:i + 3]
+
+        if (
+            isinstance(key_token, KeyToken)
+            and key_token.start_mark.column == 0
+            and isinstance(scalar_token, ScalarToken)
+            and scalar_token.start_mark.column == 0
+            and isinstance(value_token, ValueToken)
+            and scalar_token.value == key
+        ):
+            matches.append((i, value_token.end_mark.index))
+
+    if len(matches) != 1:
+        raise ValueError(
+            f"{filename}: expected exactly one top-level "
+            f"{key!r}, found {len(matches)}"
+        )
+
+    index, start = matches[0]
+
+    # The next top-level key marks the end of this value.
+    end = len(text)
+
+    for token in tokens[index + 3:]:
+        if isinstance(token, KeyToken) and token.start_mark.column == 0:
+            end = token.start_mark.index
+            break
+
+    return start, end
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Replace a top-level YAML value without reserializing."
+    )
+    parser.add_argument("template", type=Path)
+    parser.add_argument("providers", type=Path)
+    parser.add_argument("output", type=Path)
+    args = parser.parse_args()
+
+    try:
+        with args.template.open(encoding="utf-8", newline="") as f:
+            template = f.read()
+
+        with args.providers.open(encoding="utf-8", newline="") as f:
+            providers = f.read()
+
+        key = "proxy-providers"
+
+        template_start, template_end = find_top_level_value(
+            template, key, args.template
+        )
+
+        source_start, source_end = find_top_level_value(
+            providers, key, args.providers
+        )
+
+        replacement = providers[source_start:source_end]
+
+        result = (
+            template[:template_start]
+            + replacement
+            + template[template_end:]
+        )
+
+        # Validate the final YAML, including cross-file anchor references.
+        documents = list(yaml.compose_all(result))
+
+        if len(documents) != 1 or documents[0] is None:
+            raise ValueError("Expected exactly one non-empty YAML document")
+
+        with args.output.open("w", encoding="utf-8", newline="") as f:
+            f.write(result)
+
+        print(f"Generated: {args.output}")
+
+    except (OSError, yaml.YAMLError, ValueError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
