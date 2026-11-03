@@ -1,6 +1,15 @@
+# Common files
 *.bak
 *.rej
 *.orig
+*.diff
+
+# Local secrets and temporary files
+.git-crypt-key
+*.key
 secret
-config.diff
+
+# Clash config
+output.yaml
 final_config.yaml
+temp_config.yaml
