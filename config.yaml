@@ -3,9 +3,9 @@
 x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://generativelanguage.googleapis.com/generate_204}
+x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://www.google.com/generate_204}
+x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://cp.cloudflare.com/generate_204}
 #x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
 x-proxy-group-reject: &proxy-group-reject {type: select, proxies: [REJECT, 直接连接, 下载专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
@@ -148,12 +148,12 @@ proxy-groups:
 - {name: 倍率专线, type: select, include-all: true, filter: "(?i)(专|專|高倍)",
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/VIP.png"}
 - {name: 亚太快速, type: url-test, include-all: true, tolerance: 100, lazy: true, filter: "(?i)(港|hk|hongkong|hong kong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|越南|vn|vietnam)",
- exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png"}
-- {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)",
+ exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Speedtest.png", url: https://cp.cloudflare.com/generate_204}
+- {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)", url: https://www.google.com/generate_204,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
-- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[米\].*(SG|US|TW)|^\[OKZ\].*(GPT|Sora))',
+- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[米\].*(SG|US|TW)|^\[OKZ\].*(GPT|Sora))', url: https://generativelanguage.googleapis.com/generate_204,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)',
+- {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)', url: https://cp.cloudflare.com/generate_204,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
 - {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|高倍|0.5x|0.1x|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
