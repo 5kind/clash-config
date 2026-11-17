@@ -118,7 +118,7 @@ sudo apt-get install -y git git-crypt python3 python3-yaml
 
 其他 Linux 发行版请安装对应的软件包。
 
-Windows 用户可以通过 WSL 使用同样的 Linux 工具链。
+Windows 用户可以通过 winget 安装相关工具链。
 
 ### 5. 解锁私有配置
 
@@ -197,6 +197,7 @@ patch/override.yaml
 例如：
 
 ```yaml
+secret: "你的密钥"
 dns:
   proxy-server-nameserver-policy:
     "example.com": "https://dns.example.com/dns-query"
