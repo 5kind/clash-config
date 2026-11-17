@@ -203,6 +203,8 @@ rules:
   - DOMAIN-SUFFIX,live.cn,直接连接
   - DOMAIN-KEYWORD,aria2,直接连接
   - DOMAIN-SUFFIX,smtp,直接连接
+  # NTP(UDP 123) 一律直连：经代理的 UDP 时间同步易失败，导致 App 时间校验异常
+  - AND,((NETWORK,udp),(DST-PORT,123)),直接连接
   # ==========================================
   # 2. 广告与跟踪器阻断 (Block)
   # ==========================================
@@ -243,6 +245,8 @@ rules:
   - GEOSITE,category-dev,学术开发
 # - 人工智能 (AI)
   - GEOSITE,category-ai-chat-!cn,人工智能
+  # RevenueCat(ChatGPT 内购/订阅校验)不在 geosite 列表，曾掉入 MATCH 兜底走其他出口；与 AI 主流量保持同一出口
+  - DOMAIN-SUFFIX,revenuecat.com,人工智能
   - GEOSITE,microsoft-dev,人工智能
   - GEOSITE,youtube,影音娱乐
   - GEOSITE,google,人工智能
