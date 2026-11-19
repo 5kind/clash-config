@@ -192,6 +192,8 @@ rules:
   # ==========================================
   - GEOSITE,biliintl,影音娱乐
   - DOMAIN-SUFFIX,dl.google.com,云盘下载
+  - DOMAIN-SUFFIX,googleusercontent.com,云盘下载
+  - DOMAIN-SUFFIX,download.prss.microsoft.com,云盘下载
   # ==========================================
   # 1. 直接连接 (Bypass LAN and Private)
   # ==========================================
