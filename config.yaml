@@ -207,6 +207,12 @@ rules:
   - DOMAIN-SUFFIX,smtp,直接连接
   # NTP(UDP 123) 一律直连：经代理的 UDP 时间同步易失败，导致 App 时间校验异常
   - AND,((NETWORK,udp),(DST-PORT,123)),直接连接
+  # cachyos-rate-mirrors / rate-mirrors 镜像测速强制直连
+  - PROCESS-NAME,rate-mirrors,直接连接
+  - PROCESS-NAME,cachyos-rate-mirrors,直接连接
+  # 外层脚本用 curl 做的 geoip 探测不属于 rate-mirrors 进程
+  - DOMAIN,geoip.kde.org,直接连接
+  - DOMAIN,cachyos.org,直接连接
   # ==========================================
   # 2. 广告与跟踪器阻断 (Block)
   # ==========================================
