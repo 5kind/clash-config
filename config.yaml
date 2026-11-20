@@ -45,10 +45,15 @@ tun:
   dns-hijack:
     - "any:53"
     - "tcp://any:53"
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-  
+  device: Meta                 # 固定名字，exit-node-net 脚本里写死了 Meta
+  mtu: 1360                    # 必须 <= easytier0 的 MTU(1360)，否则回程分片
+  auto-route: true             # 只影响 A 自己的出网（表 2022），不影响转发
+  auto-redirect: false         # 关键：关掉 tproxy 劫持，别在 PREROUTING 抢走转发包
+  auto-detect-interface: true  # 有线/WiFi 切换不用改配置
+  route-exclude-address:       # 防止 mihomo 把虚拟网流量卷进 tun
+    - 10.126.126.0/24
+    - 192.168.0.0/24
+
 sniffer:
   enable: true
   parse-pure-ip: true
