@@ -1,14 +1,14 @@
 ######### 锚点 start #######
 # 策略组相关
-x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接]}
-x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://generativelanguage.googleapis.com/generate_204}
-x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://www.google.com/generate_204}
-x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://cp.cloudflare.com/generate_204}
-#x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
-x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
-x-proxy-group-reject: &proxy-group-reject {type: select, proxies: [REJECT, 直接连接, 下载专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
+x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://generativelanguage.googleapis.com/generate_204}
+x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://www.google.com/generate_204}
+x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://cp.cloudflare.com/generate_204}
+x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
+x-proxy-group-reject: &proxy-group-reject {type: select, proxies: [REJECT, 直接连接, 下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 # 订阅更新和延迟测试相关
 x-proxy-providers-common: &proxy-providers-common {type: http, interval: 3600, health-check: {enable: true, url: "https://www.gstatic.com/generate_204", interval: 300}}
 x-filter-provider-info: &filter-provider-info "(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|剩余|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|频道|无法|说明|使用|提示|特别|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)"
@@ -154,9 +154,9 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Game.png"}
 - {name: 云盘下载, <<: *proxy-group-highflow,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/iCloud.png"}
-- {name: 影音娱乐, <<: *proxy-group-default,
+- {name: 影音娱乐, <<: *proxy-group-streaming,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/YouTube.png"}
-- {name: NSFW, <<: *proxy-group-west,
+- {name: NSFW网站, <<: *proxy-group-west,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Pornhub.png"}
 - {name: 国内流量, <<: *proxy-group-direct,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/China_Map.png"}
@@ -164,7 +164,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/AdBlack.png"}
 - {name: 其他流量, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Final.png"}
-  # 地区分组：亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 下载专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
+  # 地区分组：亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 下载专线, EMBY专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: *filter-provider-info,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Server.png"}
 - {name: 原生加速, type: select, include-all: true, filter: "(?i)(原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽)",
@@ -177,18 +177,20 @@ proxy-groups:
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/United_Kingdom.png"}
 - {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[米\].*(SG|US|TW)|^\[OKZ\].*(GPT|Sora))', url: https://generativelanguage.googleapis.com/generate_204,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Unlock.png"}
-- {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, interval: 300, filter: '(?i)(0.5x|0.1x|香港|日本|新加坡|台湾)', url: https://cp.cloudflare.com/generate_204,
+- {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, interval: 300, filter: '(?i)(香港|日本|新加坡|台湾)', url: https://cp.cloudflare.com/generate_204,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Download.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|高倍|0.5x|0.1x|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
+- {name: EMBY专线, type: select, proxies: [下载专线], include-all: true, filter: '(?i)(EMBY)',
+ exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Emby.png"}
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|高倍|EMBY|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Available.png"}
 # Note: 自动选择与负载均衡排除节点信息，高倍与直连节点，故障转移仅排除节点信息与高倍节点，手动连接仅排除节点信息
-- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, interval: 180, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
+- {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Auto.png"}
-- {name: 故障转移, type: fallback, hidden: true, include-all: true, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: "(?i)^(?!.*(?:直接连接)).*$",
+- {name: 故障转移, type: fallback, include-all: true, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Loop.png"}
 - {name: 负载均衡, type: load-balance, hidden: true, include-all: true, strategy: consistent-hashing, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Static.png"}
-- {name: 手动选择, type: select, include-all: true,
+- {name: 手动选择, type: select, include-all: true, filter: "(?i)^(?!.*(?:高倍)).*$",
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/mini/Global.png"}
 
 rules:
@@ -272,10 +274,10 @@ rules:
   - GEOSITE,dropbox,云盘下载
   - GEOSITE,pikpak,云盘下载
   - GEOSITE,mega,云盘下载
-# - NSFW (Adult Content)
-  - GEOSITE,category-porn,NSFW
-  - GEOSITE,ehentai,NSFW
-  - GEOSITE,pixiv,NSFW
+# - NSFW网站 (Adult Content)
+  - GEOSITE,category-porn,NSFW网站
+  - GEOSITE,ehentai,NSFW网站
+  - GEOSITE,pixiv,NSFW网站
 # - 社交媒体 (Social Media)
   - GEOSITE,category-social-media-!cn,社交媒体
   - GEOSITE,telegram,社交媒体
