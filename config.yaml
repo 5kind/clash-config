@@ -3,9 +3,9 @@
 x-proxy-group-auto: &proxy-group-auto {type: select, proxies: [自动选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
-x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://generativelanguage.googleapis.com/generate_204}
-x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://www.google.com/generate_204}
-x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接], url: https://cp.cloudflare.com/generate_204}
+x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
 x-proxy-group-reject: &proxy-group-reject {type: select, proxies: [REJECT, 直接连接, 下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
@@ -86,7 +86,7 @@ dns:
     - 223.5.5.5
     - 8.8.8.8
     - 1.1.1.1
-    - system 
+    - system
   nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
@@ -175,15 +175,15 @@ proxy-groups:
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Asia_Map.png", url: https://cp.cloudflare.com/generate_204}
 - {name: 欧美优选, type: fallback, include-all: true, interval: 300, filter: "(?i)(英|uk|美|us|unitedstates|united states)", url: https://www.google.com/generate_204,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States_Map.png"}
-- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[米\].*(SG|US|TW)|^\[OKZ\].*(GPT|Sora))', url: https://generativelanguage.googleapis.com/generate_204,
+- {name: AI专线, type: fallback, include-all: true, interval: 300, filter: '(?i)(^\[米\].*(SG|US|TW|MY)|^\[OKZ\].*(GPT|Sora))', url: https://generativelanguage.googleapis.com/generate_204,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png"}
 - {name: 下载专线, type: load-balance, include-all: true, strategy: round-robin, interval: 300, filter: '(?i)(香港|日本|新加坡|台湾)', url: https://cp.cloudflare.com/generate_204,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Download.png"}
 - {name: EMBY专线, type: select, proxies: [下载专线], include-all: true, filter: '(?i)(EMBY)',
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png"}
-- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|高倍|EMBY|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|高倍|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
+- {name: 其它地区, type: select, include-all: true, filter: "(?i)^(?!.*(?:直接连接|高倍|EMBY|原生|混合负载|全球加速|动态加速|智能路由|ISP|家宽|专|專|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|韩|kr|新加坡|sg|singapore|美|us|unitedstates|英|uk|越南|vn|vietnam|GPT|Sora)).*",
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/World_Map.png"}
-# Note: 自动选择与负载均衡排除节点信息，高倍与直连节点，故障转移仅排除节点信息与高倍节点，手动连接仅排除节点信息
+# Note: 自动选择、故障转移、负载均衡均排除节点信息、高倍与直连节点；手动选择排除节点信息与高倍节点
 - {name: 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: true, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
  exclude-filter: *filter-provider-info, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png"}
 - {name: 故障转移, type: fallback, include-all: true, interval: 300, url: "http://cp.cloudflare.com/generate_204", filter: *filter-normal-magnification,
@@ -211,7 +211,8 @@ rules:
   - GEOIP,lan,直接连接,no-resolve
   - DOMAIN-SUFFIX,live.cn,直接连接
   - DOMAIN-KEYWORD,aria2,直接连接
-  - DOMAIN-SUFFIX,smtp,直接连接
+  # SMTP(25/465/587) 一律直连：邮件端口经代理常被拒绝或判为滥用，直连以保证正常投递
+  - DST-PORT,25/465/587,直接连接
   # NTP(UDP 123) 一律直连：经代理的 UDP 时间同步易失败，导致 App 时间校验异常
   - AND,((NETWORK,udp),(DST-PORT,123)),直接连接
   # cachyos-rate-mirrors / rate-mirrors 镜像测速强制直连
