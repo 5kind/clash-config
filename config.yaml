@@ -5,6 +5,7 @@ x-proxy-group-default: &proxy-group-default {type: select, proxies: [默认选�
 x-proxy-group-direct: &proxy-group-direct {type: select, proxies: [直接连接, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择]}
 x-proxy-group-ai: &proxy-group-ai {type: select, proxies: [AI专线, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-west: &proxy-group-west {type: select, proxies: [欧美优选, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
+x-proxy-group-asia: &proxy-group-asia {type: select, proxies: [亚太快速, 默认选择, 下载专线, EMBY专线, 欧美优选, 原生加速, 倍率专线, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-highflow: &proxy-group-highflow {type: select, proxies: [下载专线, EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-streaming: &proxy-group-streaming {type: select, proxies: [EMBY专线, 默认选择, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择, 直接连接]}
 x-proxy-group-failback: &proxy-group-failback {type: select, proxies: [负载均衡, 默认选择, 下载专线, EMBY专线, 亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 其它地区, 自动选择, 故障转移, 手动选择, 直接连接]}
@@ -150,7 +151,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"}
 - {name: 社交媒体, <<: *proxy-group-default,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png"}
-- {name: 游戏加速, <<: *proxy-group-direct,
+- {name: 游戏加速, <<: *proxy-group-asia,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Steam.png"}
 - {name: 云盘下载, <<: *proxy-group-highflow,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/iCloud.png"}
@@ -162,7 +163,7 @@ proxy-groups:
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/China_Map.png"}
 - {name: 广告阻断, <<: *proxy-group-reject,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"}
-- {name: 其他流量, <<: *proxy-group-default,
+- {name: 其他流量, <<: *proxy-group-highflow,
  icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"}
   # 地区分组：亚太快速, 原生加速, 倍率专线, 欧美优选, AI专线, 下载专线, EMBY专线, 其它地区, 自动选择, 故障转移, 负载均衡, 手动选择
 - {name: 订阅信息, type: select, include-all: true, filter: *filter-provider-info,
